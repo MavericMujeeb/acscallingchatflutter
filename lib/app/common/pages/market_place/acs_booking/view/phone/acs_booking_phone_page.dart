@@ -73,7 +73,7 @@ class ACSBookingPhonePageState
   late final WebViewController _controller;
   var strCodeResaponseURL = '';
 
-  var strGetCodeUrl = 'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/authorize?response_type=code&client_id=e6197263-b986-4f08-9a27-08a4ec1b5c8e&state=12345&scope=https://graph.microsoft.com/.default&redirect_uri=https://oauth.pstmn.io/v1/browser-callback';
+  var strGetCodeUrl = 'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/authorize?response_type=code&client_id=e6197263-b986-4f08-9a27-08a4ec1b5c8e&scope=https://graph.microsoft.com/.default&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&state=12345';
 
   @override
   void initState() {
@@ -118,7 +118,11 @@ class ACSBookingPhonePageState
             if(url.contains('browser-callback?')){
               strCodeResaponseURL = url.toString();
               List<String> strSplitURL = strCodeResaponseURL.split("code=");
-              acsBookingController!.strCode = strSplitURL[1];
+              // acsBookingController!.strCode = strSplitURL[1];
+              var strCodeWithStateSession = strSplitURL[1];
+
+              List<String> strSplitURL1 = strCodeWithStateSession.split("&state=");
+              acsBookingController!.strCode = strSplitURL1[0];
 
               print("Code on response is : "+acsBookingController!.strCode.toString());
 
@@ -158,9 +162,9 @@ class ACSBookingPhonePageState
     timeslots = acsBookingController!
         .getTimeSlotsToDisplay(startWorkingHr, endWorkingHr);
 
-    var parts = timeslots[0].split('-');
-    acsBookingController!.pickedStartTime = parts[0].trim();
-    acsBookingController!.pickedEndTime = parts[1].trim();
+    // var parts = timeslots[0].split('-');
+    // acsBookingController!.pickedStartTime = parts[0].trim();
+    // acsBookingController!.pickedEndTime = parts[1].trim();
     refreshTimeSlotsUI(-1);
     setState(() {});
   }
@@ -270,9 +274,9 @@ class ACSBookingPhonePageState
         ],
       );
 
-  void showToast(String s, String day, String dayofWeek) {
+  void showToast(String strMsg) {
     final snackBar = SnackBar(
-      content: Text(s.toString() + " " + day.toString() + " " + dayofWeek),
+      content: Text(strMsg.toString()),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -280,10 +284,14 @@ class ACSBookingPhonePageState
 
   Widget bottomBookingButton() => GestureDetector(
         onTap: () {
-          setWebviewController();
-          isWebView = true;
-          // bookAnAppointment();
-          setState(() {});
+          if(acsBookingController!.pickedStartTime == "" || acsBookingController!.pickedEndTime == "") {
+            showToast(Constants.selectTimeSlotMsg);
+          } else {
+            setWebviewController();
+            isWebView = true;
+            // bookAnAppointment();
+            setState(() {});
+          }
         },
         child: customButton(
             const Icon(null, size: 0),
@@ -319,6 +327,9 @@ class ACSBookingPhonePageState
 
                     // _selected.clear();
                     // _selected = List.generate(acsBookingController!.resp['value'][0]['availabilityView'].length, (i) => false);
+
+                    acsBookingController!.pickedStartTime = "";
+                    acsBookingController!.pickedEndTime = "";
 
                     acsBookingController!.defaultDate = formattedDate;
 
@@ -361,6 +372,9 @@ class ACSBookingPhonePageState
           acsBookingController!.selectedBankerId = acsBookingController!
               .respGetBanker['value'][index]['id']
               .toString();
+
+          acsBookingController!.pickedStartTime = "";
+          acsBookingController!.pickedEndTime = "";
 
           getAppoinments(today.weekday - 1, acsBookingController!.defaultDate);
           setState(() {});
@@ -491,7 +505,7 @@ class ACSBookingPhonePageState
           } else {
             //Handle event for time slots available
               refreshTimeSlotsUI(index),
-              splitTime = timeslots[0].split('-'),
+              splitTime = timeslots[index].split('-'),
               acsBookingController!.pickedStartTime = splitTime[0].trim(),
               acsBookingController!.pickedEndTime = splitTime[1].trim(),
             }
@@ -612,7 +626,7 @@ class ACSBookingPhonePageState
   }
 
   void refreshTimeSlotsUI(int index) {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 50; i++) {
       setState(() => _selected[i] = false);
     }
     if (index >= 0) {

@@ -17,8 +17,10 @@ class ACSBookingController extends BaseController {
 
   var resp;
   var respGetBanker;
+  var respDelegateToken;
   var respBooking;
   var acsToken;
+  var acsDelegateToken;
   var serviceId = '';
 
   int selectedDayIndex = 0;
@@ -133,12 +135,17 @@ class ACSBookingController extends BaseController {
   Future getBookingDelegateToken() async {
     inProgressFullScreen = true;
 
-    respBooking = await getBookingDelegateTokenAPI();
-    print("Response for get token is : "+respBooking.toString());
+    respDelegateToken = await getBookingDelegateTokenAPI();
+    print("Response for get DelegateToken is : "+respDelegateToken.toString());
+
+    acsDelegateToken = respDelegateToken['access_token'];
+
+    print("Delegate Token after parsing is : "+acsDelegateToken);
 
     inProgressFullScreen = false;
 
-    bookAppointAPI();
+    actionBookAppointment(acsDelegateToken);
+    // bookAppointAPI(acsDelegateToken);
 
     return true;
   }
@@ -150,20 +157,15 @@ class ACSBookingController extends BaseController {
     final response = await http.post(
       url,
       headers: {
-        // "Authorization": "Basic ZTYxOTcyNjMtYjk4Ni00ZjA4LTlhMjctMDhhNGVjMWI1YzhlOjRrNDhRfndiaXZseGRGSWJ5VmNOZzN5a3VubE5kSS52Y3lDMktiaTA=",
         "Content-Type": "application/x-www-form-urlencoded",
-        "Host": "login.microsoftonline.com",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Connection": "keep-alive",
-        "Content-Length": "928",
       },
       body: {
-        "grant_type": "authorization_code",
-        // "code": "0.AXwA_oVJTI7OL0yX5rA3hQt3fWNyGeaGuQhPmicIpOwbXI67AAA.AgABAAIAAAD--DLA3VO7QrddgJg7WevrAgDs_wUA9P9j2q4sbzEII8qjD5V6ipdgvC8fcAUKw6Sykk_F15FM29jG-fUjtvrdUz_i81f-ZnvHgnGaPGDcuofNeWKxe0vp1MRJGRnIfBM5aiE-TUtZEYvE3h7pkMZGNEcYTI2yHCW8DWRHKYRMcYRZuQxMreHRwy8NrZz_xhmJd_ICM8mLtuEaAujXE5LpnsXI6f_moVbwQ107Tuj0usDRZDbin6hUytIM0U4nPWAuzKOOvjyMx34ayAenckByLrHFKM94lftdSecR24HLx05GxzRAOlY1QyRPWxqqDrm3bzwL0_ZCnjMmwwsZ6bWyxbKdSswODYnjMDwMY3dK7tB1ssWKGJbl_SuxcvFLIs76kH2ZAIQiggS0Bp5CCslzXtPrVh_pxWPvRxmKeiROtj8PmVSvDjC5Z-pRzRAJWG8Q4Q9KD48CBXdWtcglAI_Tn5w1UK5kfiUeDe1Ny6n1o4ruhKUNqRRfkAnN9fTXJB1bJy6OoxnCbVhMZjrmPJvDvqNvrgS83TTc5g-1ebSnBb69k-gptB9YlekoD4Spu7ILXWYEyywf8Nbs-J_MwplgY6Ok3VMPgS_9VYcah-VzRdSEv8Zu1jHY5sir-Fywu94BwI-zMG8nDDfRIO8-_N8n7hWsLWPNVSQSqqCc-3C0Q0GqfhXSHCOHOkEDdtNjd1fF2AZTzkdqhtBUOw&state=12345&session_state=de8cd894-ea1a-4010-8961-9fe6c632b746",
-        "code": strCode,
-        "redirect_uri": "https%3A%2F%2Foauth.pstmn.io%2Fv1%2Fbrowser-callback",
         "client_id": "e6197263-b986-4f08-9a27-08a4ec1b5c8e",
         "scope": "https://graph.microsoft.com/.default",
+        "code": strCode,
+        "redirect_uri": "https://oauth.pstmn.io/v1/browser-callback",
+        "grant_type": "authorization_code",
+        "client_secret": "4k48Q~wbivlxdFIbyVcNg3ykunlNdI.vcyC2Kbi0",
       },
     );
 
@@ -171,24 +173,25 @@ class ACSBookingController extends BaseController {
     return convertDataToJson;
   }
 
-  Future actionBookAppointment() async{
+  Future actionBookAppointment(String acsTokenNew) async{
     inProgressFullScreen = true;
 
-    respBooking = await bookAppointAPI();
+    respBooking = await bookAppointAPI(acsTokenNew);
+
+    print("Booking response is : "+respBooking.toString());
 
     inProgressFullScreen = false;
 
     return true;
   }
 
-  Future bookAppointAPI() async {
+  Future bookAppointAPI(String acsTokenNew) async {
     final body = {
       "@odata.type": "#microsoft.graph.bookingAppointment",
       "customerTimeZone": "America/Chicago",
       "smsNotificationsEnabled": false,
       "endDateTime": {
         "@odata.type": "#microsoft.graph.dateTimeTimeZone",
-        // "dateTime": "2023-01-25T14:30:00.0000000+00:00",
         "dateTime": defaultDate+"T"+pickedEndTime+":00.0000000+00:00",
         "timeZone": "UTC"
       },
@@ -253,7 +256,6 @@ class ACSBookingController extends BaseController {
       "serviceNotes": "Customer requires punctual service.",
       "startDateTime": {
         "@odata.type": "#microsoft.graph.dateTimeTimeZone",
-        // "dateTime": "2023-01-25T14:00:00.0000000+00:00",
         "dateTime": defaultDate+"T"+pickedStartTime+":00.0000000+00:00",
         "timeZone": "UTC"
       },
@@ -310,12 +312,13 @@ class ACSBookingController extends BaseController {
 
     final requestString = json.encode(body);
 
-    acsToken = await AppSharedPreference().getString(key: SharedPrefKey.prefs_acs_token);
+    var serviceID = await AppSharedPreference().getString(key: SharedPrefKey.prefs_service_id);
 
-    var url = Uri.parse('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceId/staffMembers/');
+    // var url = Uri.parse('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceId/staffMembers/');
+    var url = Uri.parse('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceID/appointments');
 
     final response =
-    await http.post(url, headers: {"Authorization": "Bearer " + acsToken, "Content-Type": "application/json"}, body: requestString);
+    await http.post(url, headers: {"Authorization": "Bearer " + acsTokenNew, "Content-Type": "application/json"}, body: requestString);
     // print("Response code is : "+response.statusCode.toString());
 
     var convertDataToJson = jsonDecode(response.body);

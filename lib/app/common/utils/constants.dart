@@ -154,6 +154,7 @@ class Constants {
   static const String selectDate = 'Pick date';
   static const String pickTimeSlot = 'Pick available timeslot';
   static const String pickDate = 'Pick date';
+  static const String selectTimeSlotMsg = 'Please select time slot first';
 }
 
 
