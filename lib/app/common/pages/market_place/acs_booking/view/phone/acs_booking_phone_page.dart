@@ -13,12 +13,12 @@ import 'package:acscallingchatflutter/app/common/pages/market_place/my_apps/view
 import 'package:acscallingchatflutter/app/widgets/custom_text.dart';
 import 'package:acscallingchatflutter/data/helpers/shared_preferences.dart';
 import 'package:acscallingchatflutter/data/repositories/acs_chat_calling_repositories.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 // import 'package:marketplace/data/repositories/acs_chat_calling_repository.dart';
 
 import '../../../../../utils/constants.dart';
 import '../../controller/acs_booking_controller.dart';
 import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:http/http.dart' as http;
 
 class ACSBookingPhonePage extends View {
@@ -43,12 +43,6 @@ class ACSBookingPhonePageState
 
   int selectedTabIndex = 0;
 
-  static const MARGIN_TOP = 10.0;
-  static const MARGIN_BOTTOM = 10.0;
-  static const MARGIN_LEFT = 20.0;
-  static const MARGIN_RIGHT = 20.0;
-  static const FONT_SIZE = 24.0;
-  static const BUTTON_BORDER_RADIUS = 16.0;
   static const spacing_4 = 4.0;
   static const spacing_6 = 6.0;
   static const spacing_8 = 8.0;
@@ -72,13 +66,11 @@ class ACSBookingPhonePageState
 
   int selectedDayIndex = 0;
 
-  // bool inProgress = false;
-
   List<String> timeslots = [];
   var splitTime;
 
   bool isWebView = false;
-  late final PlatformWebViewController _controller;
+  late final WebViewController _controller;
   var strCodeResaponseURL = '';
 
   var strGetCodeUrl = 'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/authorize?response_type=code&client_id=e6197263-b986-4f08-9a27-08a4ec1b5c8e&state=12345&scope=https://graph.microsoft.com/.default&redirect_uri=https://oauth.pstmn.io/v1/browser-callback';
@@ -88,19 +80,8 @@ class ACSBookingPhonePageState
     // TODO: implement initState
     super.initState();
 
-    // DateTime today = new DateTime.now();
-    // DateTime date = new DateTime(today.year, today.month, today.day);
-
-    // getAwailableSlots(today.weekday - 1);
-
-
-    // acsBookingController?.getAwailableSlots(today.weekday - 1);
-    /*setState(() {
-
-    });*/
-
     getBankersList();
-    // getAppoinments(today.weekday - 1);
+
   }
 
   void getBankersList() async {
@@ -123,22 +104,16 @@ class ACSBookingPhonePageState
   }
 
   void setWebviewController() {
-    _controller = PlatformWebViewController(
-      WebKitWebViewControllerCreationParams(allowsInlineMediaPlayback: true),
-    )
+    _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
-      ..setPlatformNavigationDelegate(
-        PlatformNavigationDelegate(
-          const PlatformNavigationDelegateCreationParams(),
-        )
-          ..setOnProgress((int progress) {
-
-          })
-          ..setOnPageStarted((String url) {
-
-          })
-          ..setOnPageFinished((String url) {
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {
             print("OnFinished response url is : "+url.toString());
             if(url.contains('browser-callback?')){
               strCodeResaponseURL = url.toString();
@@ -152,25 +127,10 @@ class ACSBookingPhonePageState
               bookAnAppointment();
               setState(() {});
             }
-          })
-          ..setOnWebResourceError((WebResourceError error) {
-
-          })
-          ..setOnNavigationRequest((NavigationRequest request) {
-            return NavigationDecision.navigate;
-          }),
+          },
+        ),
       )
-      ..addJavaScriptChannel(JavaScriptChannelParams(
-        name: 'Toaster',
-        onMessageReceived: (JavaScriptMessage message) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
-          );
-        },
-      ))
-      ..loadRequest(LoadRequestParams(
-        uri: Uri.parse(strGetCodeUrl),
-      ));
+      ..loadRequest(Uri.parse(strGetCodeUrl));
   }
 
   getAppoinments(int weekday, String date) async {
@@ -242,9 +202,7 @@ class ACSBookingPhonePageState
         Expanded(
           child: Container(
             color: Colors.white,
-            child: PlatformWebViewWidget(
-              PlatformWebViewWidgetCreationParams(controller: _controller),
-            ).build(context),
+            child:  WebViewWidget(controller: _controller),
           ),
         ),
       ],

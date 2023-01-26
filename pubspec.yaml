@@ -35,8 +35,8 @@ dependencies:
   font_awesome_flutter: ^10.3.0
   intl: ^0.18.0
   oauth2: ^2.0.1
-    #webview_flutter: ^4.0.0
-  webview_flutter_wkwebview: ^3.0.2
+  webview_flutter: ^4.0.2
+#  webview_flutter_wkwebview: ^3.0.2
 
 dev_dependencies:
   flutter_test:
