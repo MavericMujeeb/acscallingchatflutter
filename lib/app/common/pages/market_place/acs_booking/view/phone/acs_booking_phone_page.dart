@@ -95,6 +95,9 @@ class ACSBookingPhonePageState
     acsBookingController!.selectedBankerId = acsBookingController!
         .respGetBanker['value'][0]['id']
         .toString();
+    acsBookingController!.selectedBankerName = acsBookingController!
+        .respGetBanker['value'][0]['displayName']
+        .toString();
 
     String formattedDate = DateFormat('yyyy-MM-dd').format(today);
     acsBookingController!.defaultDate = formattedDate;
@@ -172,6 +175,16 @@ class ACSBookingPhonePageState
   bookAnAppointment() async {
     //await acsBookingController!.actionBookAppointment();
     await acsBookingController!.getBookingDelegateToken();
+    print("Response on UI part : "+acsBookingController!.respBooking.toString());
+    if(acsBookingController!.respBooking.toString() == "Error") {
+      showToast("Something went wrong, please try again");
+    } else {
+      // Navigate to previous screen..
+      showToast("Booking is completed on "+ acsBookingController!.defaultDate + " at "+acsBookingController!.pickedStartTime + " with "+acsBookingController!.selectedBankerName);
+      // If in success we want to go back to previous screen use below code.
+      //popScreen(context);
+    }
+
     setState(() {});
     //popScreen(context);
   }
@@ -372,6 +385,7 @@ class ACSBookingPhonePageState
           acsBookingController!.selectedBankerId = acsBookingController!
               .respGetBanker['value'][index]['id']
               .toString();
+          acsBookingController!.selectedBankerName = acsBookingController!.respGetBanker['value'][index]['displayName'].toString();
 
           acsBookingController!.pickedStartTime = "";
           acsBookingController!.pickedEndTime = "";
