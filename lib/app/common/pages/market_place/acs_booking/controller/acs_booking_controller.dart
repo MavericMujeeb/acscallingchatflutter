@@ -25,6 +25,7 @@ class ACSBookingController extends BaseController {
 
   int selectedDayIndex = 0;
   var selectedBankerEmailId = '';
+  var selectedBankerName = '';
   var selectedBankerId = '';
 
   bool inProgress = false;
@@ -142,10 +143,14 @@ class ACSBookingController extends BaseController {
 
     print("Delegate Token after parsing is : "+acsDelegateToken);
 
-    inProgressFullScreen = false;
+    // inProgressFullScreen = false;
 
-    actionBookAppointment(acsDelegateToken);
-    // bookAppointAPI(acsDelegateToken);
+    // actionBookAppointment(acsDelegateToken);
+    respBooking = await bookAppointAPI(acsDelegateToken);
+
+    print("Booking response is : "+respBooking.toString());
+
+    inProgressFullScreen = false;
 
     return true;
   }
@@ -181,6 +186,13 @@ class ACSBookingController extends BaseController {
     print("Booking response is : "+respBooking.toString());
 
     inProgressFullScreen = false;
+
+    /*if(respBooking == "Error there : 403") {
+      return false;
+      inProgressFullScreen = false;
+    } else {
+      return true;
+    }*/
 
     return true;
   }
@@ -319,9 +331,17 @@ class ACSBookingController extends BaseController {
 
     final response =
     await http.post(url, headers: {"Authorization": "Bearer " + acsTokenNew, "Content-Type": "application/json"}, body: requestString);
-    // print("Response code is : "+response.statusCode.toString());
+    print("Response code is : "+response.statusCode.toString());
 
-    var convertDataToJson = jsonDecode(response.body);
-    return convertDataToJson;
+    if(response.statusCode.toString() == "201") {
+      var convertDataToJson = jsonDecode(response.body);
+      return convertDataToJson;
+    } else {
+      // return "Error there : "+response.statusCode.toString();
+      return "Error";
+    }
+
+    // var convertDataToJson = jsonDecode(response.body);
+    // return convertDataToJson;
   }
 }
