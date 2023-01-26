@@ -175,18 +175,17 @@ class ACSBookingPhonePageState
   bookAnAppointment() async {
     //await acsBookingController!.actionBookAppointment();
     await acsBookingController!.getBookingDelegateToken();
-    print("Response on UI part : "+acsBookingController!.respBooking.toString());
+
     if(acsBookingController!.respBooking.toString() == "Error") {
       showToast("Something went wrong, please try again");
     } else {
       // Navigate to previous screen..
       showToast("Booking is completed on "+ acsBookingController!.defaultDate + " at "+acsBookingController!.pickedStartTime + " with "+acsBookingController!.selectedBankerName);
       // If in success we want to go back to previous screen use below code.
-      //popScreen(context);
+      popScreen(context);
     }
 
     setState(() {});
-    //popScreen(context);
   }
 
   Widget get loadWebView => Container(

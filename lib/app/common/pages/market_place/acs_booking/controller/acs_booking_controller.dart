@@ -137,18 +137,13 @@ class ACSBookingController extends BaseController {
     inProgressFullScreen = true;
 
     respDelegateToken = await getBookingDelegateTokenAPI();
-    print("Response for get DelegateToken is : "+respDelegateToken.toString());
 
     acsDelegateToken = respDelegateToken['access_token'];
-
-    print("Delegate Token after parsing is : "+acsDelegateToken);
 
     // inProgressFullScreen = false;
 
     // actionBookAppointment(acsDelegateToken);
     respBooking = await bookAppointAPI(acsDelegateToken);
-
-    print("Booking response is : "+respBooking.toString());
 
     inProgressFullScreen = false;
 
@@ -182,8 +177,6 @@ class ACSBookingController extends BaseController {
     inProgressFullScreen = true;
 
     respBooking = await bookAppointAPI(acsTokenNew);
-
-    print("Booking response is : "+respBooking.toString());
 
     inProgressFullScreen = false;
 
@@ -277,7 +270,7 @@ class ACSBookingController extends BaseController {
       "customers": [
         {
           "@odata.type": "#microsoft.graph.bookingCustomerInformation",
-          "customerId": "AAMkADgxMDg4NWMzLTIzNWMtNDViYy1hYWJhLTE0NTZjZDgzODRhYQBGAAAAAACttVURj_1bRqcklkXFuHxLBwD8ukkXMomQSraJ697DBpjEAAAAAAEOAAD8ukkXMomQSraJ697DBpjEAAACELssAAA=",
+          "customerId": "7ed53fa5-9ef2-4f2f-975b-27447440bc09",
           "name": "Melinda Gates",
           "emailAddress": "acharya.83@gmail.com",
           "phone": "862-228-7032",
@@ -331,7 +324,6 @@ class ACSBookingController extends BaseController {
 
     final response =
     await http.post(url, headers: {"Authorization": "Bearer " + acsTokenNew, "Content-Type": "application/json"}, body: requestString);
-    print("Response code is : "+response.statusCode.toString());
 
     if(response.statusCode.toString() == "201") {
       var convertDataToJson = jsonDecode(response.body);
