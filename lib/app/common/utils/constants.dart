@@ -55,6 +55,7 @@ class AppColor {
 
   // Constant colors..
   static const Color black_color = Color(0xFF000000);
+  static const Color black_trans = Color(0x80000000);
   static const Color white_color_70 = Color(0xB3FFFFFF);
   static const Color black_color_87 = Color(0xDD000000);
   static const Color black_color_54 = Color(0x8A000000);

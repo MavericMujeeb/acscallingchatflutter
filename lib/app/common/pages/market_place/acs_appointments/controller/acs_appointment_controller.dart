@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:acscallingchatflutter/app/common/pages/base/controller/base_controller.dart';
@@ -5,47 +7,80 @@ import 'package:acscallingchatflutter/app/common/utils/constants.dart';
 import 'package:acscallingchatflutter/data/helpers/shared_preferences.dart';
 import 'package:acscallingchatflutter/domain/entities/product_dao.dart';
 
-class ACSAppointmentController extends BaseController {
-  List<ProductDao> similarApps = [];
-  List<String> keyPoints = [];
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
+class ACSAppointmentController extends BaseController {
+
+  var resp;
+
+  var acsToken = '';
+  var serviceId = '';
+
+  bool inProgress = false;
 
   ACSAppointmentController(super.repo) {
-    similarApps = [
-      ProductDao(Resources.money_quotient_img, 'Money Quotient',
-          '#1 in wealth', 'New','',[]),
-      ProductDao(Resources.advisor_metrix_img, 'Advisor metrix',
-          '#2 in wealth', 'Popular','',[]),
-      ProductDao(Resources.blackrock_img, 'Black rock', '#3 in wealth', 'New','',[]),
-    ];
-  }
-  ProductDao productAddepar = ProductDao(
-      Resources.addaper_icon_img,
-      'Addepar',
-      'Estimate your customer\'s ability to repay the loans with DN Scoring app',
-      'POPULAR',
-      'In the world of financial advice, speed, clarity and foresight aren\'t just nice to have,'
-          'they\'re a necessity. '
-          'Yet tools are insufficient: wealth management firms need more productivity, scale and reach to remain competitive.'
-          ' And  client  exceptions are raising, as people demand a more genuine, more human relationship from those they do business with',
-      ['A complete view of your clients\' wealth',
-        'Portfolio access with ease',
-        'Increase operational efficiency',
-        'Portfolio Trading and re balancing',
-        'Scenario Modeling and Forecasting',
-        'Streamlined Billing, Plus Calculation Insights']);
-
-
-  Color getStatusTextColor(String dataStatus) {
-
-    return (dataStatus == Constants.popular_camel_case)
-        ? const Color(0xFFC99700)
-        : const Color(0xFF006E0A);
   }
 
-  Color getStatusContainerColor(String dataStatus) {
-    return (dataStatus == Constants.popular_camel_case)
-        ? const Color(0xFFFFE166)
-        : const Color(0xFFEBFFED);
+  Future getToken() async {
+
+    inProgress = true;
+
+    serviceId = await AppSharedPreference()
+        .getString(key: SharedPrefKey.prefs_service_id);
+    var url = Uri.parse(
+        'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/token');
+    final response = await http.post(url, body: {
+      'client_id': 'e6197263-b986-4f08-9a27-08a4ec1b5c8e',
+      'scope': 'https://graph.microsoft.com/.default',
+      'client_secret': '4k48Q~wbivlxdFIbyVcNg3ykunlNdI.vcyC2Kbi0',
+      'grant_type': 'client_credentials'
+    });
+
+    var respToken = jsonDecode(response.body);
+
+    acsToken = respToken['access_token'];
+
+    // acsToken = AppSharedPreference().getString(key: SharedPrefKey.prefs_acs_token);
+    AppSharedPreference()
+        .addString(key: SharedPrefKey.prefs_acs_token, value: acsToken);
+
+    // acsToken = await AppSharedPreference().getString(key: SharedPrefKey.prefs_acs_token);
+
+    resp = await getAppointmentsAPI();
+
+    print("Respose on getAppointments is : "+resp.toString());
+
+    inProgress = false;
+
+    return true;
   }
+
+  Future getAppointmentsAPI() async {
+    var nowDate = DateTime.now();
+    var thirtydaysDate = DateTime(nowDate.year, nowDate.month, nowDate.day + 31);
+    var format = DateFormat('yyyy-MM-dd');
+    var timeformat = DateFormat('HH:mm');
+    String currentDate = format.format(nowDate);
+    String oneMonthDate = format.format(thirtydaysDate);
+    String currentTime = timeformat.format(nowDate);
+    String finalstartDate = "${currentDate}T$currentTime:00-08:00";
+    String finalendDate = "${oneMonthDate}T00:00:00-08:00";
+    // print(currentDate);
+    // print(oneMonthDate);
+    // print(currentTime);
+    // print(finalstartDate);
+    // print(finalendDate);
+    var url = Uri.parse(
+        'https://graph.microsoft.com/v1.0/users/chantalkendall@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=$finalstartDate&endDateTime=$finalendDate');
+    // 'https://graph.microsoft.com/v1.0/users/GatesFamilyOffice@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-17T00:00:00-08:00&endDateTime=2023-01-19T19:00:00-08:00');
+    // 'https://graph.microsoft.com/v1.0/users/kishan@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-22T13:45:00-08:00&endDateTime=2023-02-24T00:00:00-08:00');
+    print("URL->"+url.toString());
+    final response =
+    await http.get(url, headers: {"Authorization": "Bearer " + acsToken});
+
+    var convertDataToJson = jsonDecode(response.body);
+    return convertDataToJson;
+  }
+
 }
