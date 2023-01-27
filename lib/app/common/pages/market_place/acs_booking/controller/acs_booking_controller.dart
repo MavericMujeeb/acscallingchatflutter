@@ -73,8 +73,10 @@ class ACSBookingController extends BaseController {
   }
 
   Future getBankersListAPI() async {
+    serviceId = await AppSharedPreference()
+        .getString(key: SharedPrefKey.prefs_service_id);
     var url = Uri.parse(
-        'https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/GatesFamilyOffice@27r4l5.onmicrosoft.com/staffMembers/');
+        'https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceId/staffMembers/');
     final response =
         await http.get(url, headers: {"Authorization": "Bearer " + acsToken});
 
@@ -233,7 +235,7 @@ class ACSBookingController extends BaseController {
           "recipients": "staff"
         }
       ],
-      "serviceId": "555c5745-57a6-4bb4-8c5f-1c5f99a21b60",
+      "serviceId": "3e3fa061-225b-40fc-852c-c17a2a2d96eb",
       "serviceLocation": {
         "@odata.type": "#microsoft.graph.location",
         "address": {
@@ -257,21 +259,21 @@ class ACSBookingController extends BaseController {
         "uniqueIdType@odata.type": "#microsoft.graph.locationUniqueIdType",
         "uniqueIdType": null
       },
-      "serviceName": "Document Sharing",
+      "serviceName": "30 Min meeting",
       "serviceNotes": "Customer requires punctual service.",
       "startDateTime": {
         "@odata.type": "#microsoft.graph.dateTimeTimeZone",
         "dateTime": defaultDate+"T"+pickedStartTime+":00.0000000+00:00",
         "timeZone": "UTC"
       },
-      "maximumAttendeesCount": 5,
+      "maximumAttendeesCount": 1,
       "filledAttendeesCount": 1,
       "customers@odata.type": "#Collection(microsoft.graph.bookingCustomerInformation)",
       "customers": [
         {
           "@odata.type": "#microsoft.graph.bookingCustomerInformation",
-          "customerId": "7ed53fa5-9ef2-4f2f-975b-27447440bc09",
-          "name": "Melinda Gates",
+          "customerId": "a2194b29-07bb-48bb-8607-6151334cf904",
+          "name": "Janet Johnson",
           "emailAddress": "acharya.83@gmail.com",
           "phone": "862-228-7032",
           "notes": null,

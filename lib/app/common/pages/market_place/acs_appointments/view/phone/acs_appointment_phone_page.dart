@@ -183,7 +183,7 @@ class ACSAppointmentPhonePageState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(
-                    textName: 'Hello Kishan!',
+                    textName: 'Hello Janet Johnson!',
                     textAlign: TextAlign.start,
                     fontSize: 17,
                     fontWeight: FontWeight.w400),
@@ -194,40 +194,19 @@ class ACSAppointmentPhonePageState
                     textAlign: TextAlign.start,
                     fontSize: 15,
                     fontWeight: FontWeight.w300),
-                vSpacer(10.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.document_scanner,
-                          size: 14,
-                          color: AppColor.brown_231d18,
-                        ),
-                        hSpacer(spacing_4),
-                        CustomText(
-                            textName: Constants.viewDetails,
-                            textAlign: TextAlign.start,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400),
-                      ],
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          joinCallClick(
-                              resp['value'][index]['onlineMeeting']['joinUrl'],
-                              resp['value'][index]['attendees'].length >0 ? resp['value'][index]['attendees'][0]['emailAddress']['name'].toString() : "No Name");
-                        },
-                        child: customButton(
-                            40,
-                            Constants.joinMeeting,
-                            Colors.white,
-                            AppColor.brown_231d18,
-                            AppColor.brown_231d18)),
-                  ],
-                ),
+                vSpacer(15.0),
+                GestureDetector(
+                    onTap: () {
+                      joinCallClick(
+                          resp['value'][index]['onlineMeeting']['joinUrl'],
+                          resp['value'][index]['attendees'].length >0 ? resp['value'][index]['attendees'][0]['emailAddress']['name'].toString() : "No Name");
+                    },
+                    child: customButton(
+                        40,
+                        Constants.joinMeeting,
+                        Colors.white,
+                        AppColor.brown_231d18,
+                        AppColor.brown_231d18)),
               ],
             ),
           ),
@@ -285,7 +264,7 @@ class ACSAppointmentPhonePageState
     // print(finalstartDate);
     // print(finalendDate);
     var url = Uri.parse(
-        'https://graph.microsoft.com/v1.0/users/$serviceId/calendar/calendarView?startDateTime=$finalstartDate&endDateTime=$finalendDate');
+        'https://graph.microsoft.com/v1.0/users/chantalkendall@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=$finalstartDate&endDateTime=$finalendDate');
         // 'https://graph.microsoft.com/v1.0/users/GatesFamilyOffice@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-17T00:00:00-08:00&endDateTime=2023-01-19T19:00:00-08:00');
        // 'https://graph.microsoft.com/v1.0/users/kishan@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-22T13:45:00-08:00&endDateTime=2023-02-24T00:00:00-08:00');
     print("URL->"+url.toString());

@@ -98,5 +98,5 @@ flutter:
   # identifiers, which may be completely independent or the same as these.
   module:
     androidX: true
-    androidPackage: com.citi.marketplace
-    iosBundleIdentifier: com.citi.marketplace
+    androidPackage: com.maveric.citiacsdemo
+    iosBundleIdentifier: com.maveric.citiacsdemo
