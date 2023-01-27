@@ -1,4 +1,6 @@
 import 'package:acscallingchatflutter/app/common/navigation/pages.dart';
+import 'package:acscallingchatflutter/app/common/pages/market_place/acs_appointments/controller/acs_appointment_controller.dart';
+import 'package:acscallingchatflutter/data/repositories/acs_chat_calling_repositories.dart';
 import 'package:flutter/material.dart';
 
 void navigateToLoginScreen(context) {
@@ -12,8 +14,7 @@ void navigateToNavigatorScreen(context) {
 }
 
 void navigateToProductDetailScreen(context) {
-  Navigator.of(context)
-      .pushNamed(Pages.screen_product_detail);
+  Navigator.of(context).pushNamed(Pages.screen_product_detail);
 }
 
 void navigateToContactCernterScreen(context) {
@@ -21,17 +22,17 @@ void navigateToContactCernterScreen(context) {
 }
 
 void navigateToBookingScreen(context) {
-  Navigator.of(context).pushNamed(Pages.screen_booking);
+  Navigator.of(context).pushNamed(Pages.screen_booking).then((value) =>
+      {ACSAppointmentController(ACSChatCallingDataRepository()).getToken()});
 }
 
 void navigateToProductIntegrationProcessScreen(context, String strAppName) {
-  Navigator.of(context)
-      .pushNamed(Pages.screen_product_integration_process, arguments: {"appName": strAppName});
+  Navigator.of(context).pushNamed(Pages.screen_product_integration_process,
+      arguments: {"appName": strAppName});
 }
 
 void navigateToDashboardScreen(context, selectedIndex) {
-  Navigator.of(context)
-      .pushNamed(Pages.screen_home);
+  Navigator.of(context).pushNamed(Pages.screen_home);
 }
 
 void popScreen(context) {
