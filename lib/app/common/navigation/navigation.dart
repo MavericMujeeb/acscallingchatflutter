@@ -22,8 +22,7 @@ void navigateToContactCernterScreen(context) {
 }
 
 void navigateToBookingScreen(context) {
-  Navigator.of(context).pushNamed(Pages.screen_booking).then((value) =>
-      {ACSAppointmentController(ACSChatCallingDataRepository()).getToken()});
+  Navigator.of(context).pushNamed(Pages.screen_booking);
 }
 
 void navigateToProductIntegrationProcessScreen(context, String strAppName) {
