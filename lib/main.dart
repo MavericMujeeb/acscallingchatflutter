@@ -22,7 +22,7 @@ class MarketPlaceApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: lightTheme,
-      darkTheme: darkTheme,
+      // darkTheme: darkTheme,
       // home: DashboardPage(title: "title", selectedTabIndex: 0),
       home: const LoginPage(),
       debugShowMaterialGrid: false,
