@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:acscallingchatflutter/app/common/navigation/pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
@@ -129,13 +130,20 @@ class ACSAppointmentPhonePageState
                         bottom: 0,
                         child: GestureDetector(
                           onTap: () {
-                            if(acsAppointmentController!.inProgress) {
+                            if (acsAppointmentController!.inProgress) {
                               // Do nothing..
                             } else {
                               Future.delayed(const Duration(microseconds: 500),
-                                      () {
-                                    navigateToBookingScreen(context);
-                                  });
+                                  () {
+                                /*navigateToBookingScreen(context);*/
+                                // acsAppointmentController!.resp['value'] = "";
+                                Navigator.of(context)
+                                    .pushNamed(Pages.screen_booking)
+                                    .then((value) => {
+                                      getAppointmentList(),
+                                      setState(() {}),
+                                    });
+                              });
                             }
                           },
                           child: customButton(
