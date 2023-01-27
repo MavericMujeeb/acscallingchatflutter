@@ -24,11 +24,12 @@ class ACSAppointmentPhonePage extends View {
 }
 
 class ACSAppointmentPhonePageState
-    extends ViewState<ACSAppointmentPhonePage, ACSAppointmentController> {
-  ACSAppointmentPhonePageState()
-      : super(ACSAppointmentController(ACSChatCallingDataRepository()));
+    // extends ViewState<ACSAppointmentPhonePage, ACSAppointmentController> {
+    extends State<ACSAppointmentPhonePage> {
+  // ACSAppointmentPhonePageState(): super(ACSAppointmentController(ACSChatCallingDataRepository()));
 
-  ACSAppointmentController? productDetailsController;
+  ACSAppointmentController? acsAppointmentController =
+      ACSAppointmentController(ACSChatCallingDataRepository());
 
   static const Channel = MethodChannel('com.citi.marketplace.host');
 
@@ -49,14 +50,14 @@ class ACSAppointmentPhonePageState
   static const spacing_16 = 16.0;
   static const spacing_18 = 18.0;
 
-  var resp;
-
-  var acsToken = '';
-  var serviceId = '';
+  // var resp;
+  //
+  // var acsToken = '';
+  // var serviceId = '';
 
   Future<void> joinCallClick(meetingLink, username) async {
-    final bool status = await Channel.invokeMethod(
-        'joinCallClick', <String, String>{'meeting_id': meetingLink, 'user_name': username});
+    final bool status = await Channel.invokeMethod('joinCallClick',
+        <String, String>{'meeting_id': meetingLink, 'user_name': username});
   }
 
   /*Future<void> startCallClick() async {
@@ -87,6 +88,19 @@ class ACSAppointmentPhonePageState
   }*/
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getAppointmentList();
+  }
+
+  void getAppointmentList() async {
+    await acsAppointmentController!.getToken();
+    setState(() {});
+  }
+
+  @override
   Widget get view => Scaffold(
         backgroundColor: AppColor.bg_color_contact,
         appBar: AppBar(
@@ -94,60 +108,93 @@ class ACSAppointmentPhonePageState
           toolbarHeight: 0,
           backgroundColor: AppColor.transparent_color,
         ),
-        key: globalKey,
+        // key: globalKey,
         body: SafeArea(
-          child: ControlledWidgetBuilder<ACSAppointmentController>(
-            builder: (context, controller) {
-              productDetailsController = controller;
-              return Column(
+          child: viewContent,
+        ),
+      );
+
+  Widget get viewContent => Column(
+        children: [
+          horizontalDivider,
+          Expanded(
+            child: Container(
+              child: Stack(
                 children: [
-                  horizontalDivider,
-                  FutureBuilder(
-                    // future: getAppointments(),
-                    future: getToken(),
-                    builder: (buildContext, snapShot) {
-                      return snapShot.hasData
-                          ? resp != null && resp['value']!=null && resp['value'].length > 0
-                              ? appointmentContent
-                              : Expanded(
-                                  child: Center(
+                  Stack(
+                    children: [
+                      Positioned(
+                        left: 14.0,
+                        right: 14.0,
+                        bottom: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            if(acsAppointmentController!.inProgress) {
+                              // Do nothing..
+                            } else {
+                              Future.delayed(const Duration(microseconds: 500),
+                                      () {
+                                    navigateToBookingScreen(context);
+                                  });
+                            }
+                          },
+                          child: customButton(
+                              48,
+                              Constants.bookAnAppointment,
+                              AppColor.brown_231d18,
+                              AppColor.brown_231d18,
+                              Colors.white),
+                        ),
+                      ),
+                      Positioned(
+                        top: 14,
+                        left: 14,
+                        right: 14,
+                        bottom: 80,
+                        child: acsAppointmentController!.inProgress
+                            ? Container(
+                                height: double.infinity,
+                                width: double.infinity,
+                                // color: Colors.black12,
+                                // color: AppColor.black_trans,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )
+                            : acsAppointmentController!.resp != null &&
+                                    acsAppointmentController!.resp['value'] !=
+                                        null &&
+                                    acsAppointmentController!
+                                            .resp['value'].length >
+                                        0
+                                // ? listAppointments
+                                ? listAppointments
+                                : Center(
                                     child: CustomText(
                                         textName: Constants.noAppointments,
                                         textAlign: TextAlign.center,
                                         fontSize: 14,
                                         fontWeight: FontWeight.normal),
                                   ),
-                                )
-                          : Expanded(
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                    },
+                      ),
+                    ],
                   ),
-                  // appointmentContent,
                 ],
-              );
-            },
+              ),
+            ),
           ),
-        ),
+        ],
       );
 
   Widget get appointmentContent => Expanded(
         child: Stack(
           children: [
-            Positioned(top: 14, left:14, right: 14, bottom:80, child: listAppointments),
             Positioned(
-                left:14.0, right: 14.0, bottom:0,
-                child: GestureDetector(
-              onTap: () {
-                Future.delayed(const Duration(microseconds: 500), () {
-                  navigateToBookingScreen(context);
-                });
-              },
-              child: customButton(48, Constants.bookAnAppointment,
-                  AppColor.brown_231d18, AppColor.brown_231d18, Colors.white),
-            )),
+                top: 14,
+                left: 14,
+                right: 14,
+                bottom: 80,
+                child: listAppointments),
           ],
         ),
       );
@@ -160,7 +207,7 @@ class ACSAppointmentPhonePageState
       );
 
   Widget get listAppointments => ListView.builder(
-      itemCount: resp['value'].length,
+      itemCount: acsAppointmentController!.resp['value'].length,
       itemBuilder: (BuildContext context, int index) {
         return appointmentCellItem(index);
       });
@@ -176,12 +223,13 @@ class ACSAppointmentPhonePageState
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: spacing_14, vertical: spacing_18),
+            padding:
+                const EdgeInsets.symmetric(horizontal: spacing_14, vertical: 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                vSpacer(spacing_12),
                 CustomText(
                     textName: 'Hello Janet Johnson!',
                     textAlign: TextAlign.start,
@@ -198,15 +246,19 @@ class ACSAppointmentPhonePageState
                 GestureDetector(
                     onTap: () {
                       joinCallClick(
-                          resp['value'][index]['onlineMeeting']['joinUrl'],
-                          resp['value'][index]['attendees'].length >0 ? resp['value'][index]['attendees'][0]['emailAddress']['name'].toString() : "No Name");
+                          acsAppointmentController!.resp['value'][index]
+                              ['onlineMeeting']['joinUrl'],
+                          acsAppointmentController!
+                                      .resp['value'][index]['attendees']
+                                      .length >
+                                  0
+                              ? acsAppointmentController!.resp['value'][index]
+                                      ['attendees'][0]['emailAddress']['name']
+                                  .toString()
+                              : "No Name");
                     },
-                    child: customButton(
-                        40,
-                        Constants.joinMeeting,
-                        Colors.white,
-                        AppColor.brown_231d18,
-                        AppColor.brown_231d18)),
+                    child: customButton(40, Constants.joinMeeting, Colors.white,
+                        AppColor.brown_231d18, AppColor.brown_231d18)),
               ],
             ),
           ),
@@ -221,70 +273,25 @@ class ACSAppointmentPhonePageState
         width: width,
       );
 
-  Future getToken() async {
-    serviceId = await AppSharedPreference()
-        .getString(key: SharedPrefKey.prefs_service_id);
-    var url = Uri.parse(
-        'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/token');
-    final response = await http.post(url, body: {
-      'client_id': 'e6197263-b986-4f08-9a27-08a4ec1b5c8e',
-      'scope': 'https://graph.microsoft.com/.default',
-      'client_secret': '4k48Q~wbivlxdFIbyVcNg3ykunlNdI.vcyC2Kbi0',
-      'grant_type': 'client_credentials'
-    });
-
-    var respToken = jsonDecode(response.body);
-
-    acsToken = respToken['access_token'];
-
-    // acsToken = AppSharedPreference().getString(key: SharedPrefKey.prefs_acs_token);
-    AppSharedPreference()
-        .addString(key: SharedPrefKey.prefs_acs_token, value: acsToken);
-
-    // acsToken = await AppSharedPreference().getString(key: SharedPrefKey.prefs_acs_token);
-
-    resp = await getAppointmentsAPI();
-
-    return true;
-  }
-
-  Future getAppointmentsAPI() async {
-    var nowDate = DateTime.now();
-    var thirtydaysDate = DateTime(nowDate.year, nowDate.month, nowDate.day + 31);
-    var format = DateFormat('yyyy-MM-dd');
-    var timeformat = DateFormat('HH:mm');
-    String currentDate = format.format(nowDate);
-    String oneMonthDate = format.format(thirtydaysDate);
-    String currentTime = timeformat.format(nowDate);
-    String finalstartDate = "${currentDate}T$currentTime:00-08:00";
-    String finalendDate = "${oneMonthDate}T00:00:00-08:00";
-    // print(currentDate);
-    // print(oneMonthDate);
-    // print(currentTime);
-    // print(finalstartDate);
-    // print(finalendDate);
-    var url = Uri.parse(
-        'https://graph.microsoft.com/v1.0/users/chantalkendall@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=$finalstartDate&endDateTime=$finalendDate');
-        // 'https://graph.microsoft.com/v1.0/users/GatesFamilyOffice@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-17T00:00:00-08:00&endDateTime=2023-01-19T19:00:00-08:00');
-       // 'https://graph.microsoft.com/v1.0/users/kishan@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-22T13:45:00-08:00&endDateTime=2023-02-24T00:00:00-08:00');
-    print("URL->"+url.toString());
-    final response =
-        await http.get(url, headers: {"Authorization": "Bearer " + acsToken});
-
-    var convertDataToJson = jsonDecode(response.body);
-    return convertDataToJson;
-  }
-
   String getFormattedMessage(int index) {
     DateFormat formatter_display_date = DateFormat('MM-dd-yyyy');
     DateFormat formatter_display_time = DateFormat('hh:mm a');
 
-    DateTime tempDateTime = new DateFormat("yyyy-MM-dd'T'hh:mm:ss.sssZ")
-        .parse(resp['value'][index]['start']['dateTime'].toString(), true);
+    DateTime tempDateTime = new DateFormat("yyyy-MM-dd'T'hh:mm:ss.sssZ").parse(
+        acsAppointmentController!.resp['value'][index]['start']['dateTime']
+            .toString(),
+        true);
     var strDate = formatter_display_date.format(tempDateTime);
     var strTime = formatter_display_time.format(tempDateTime.toLocal());
-    var strTimeZone = resp['value'][index]['start']['timeZone'].toString();
-    var strBankerName = resp['value'][index]['attendees'].length >0 ? resp['value'][index]['attendees'][0]['emailAddress']['name'].toString() : "No Name";
+    var strTimeZone = acsAppointmentController!.resp['value'][index]['start']
+            ['timeZone']
+        .toString();
+    var strBankerName =
+        acsAppointmentController!.resp['value'][index]['attendees'].length > 0
+            ? acsAppointmentController!.resp['value'][index]['attendees'][0]
+                    ['emailAddress']['name']
+                .toString()
+            : "No Name";
 
     var strResponse = strDate +
         ' at ' +
@@ -317,6 +324,12 @@ class ACSAppointmentPhonePageState
               textColor: iconTextColor),
         ),
       );
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return view;
+  }
 }
 
 class CustomButtonNew extends StatelessWidget {
