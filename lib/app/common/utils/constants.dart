@@ -78,6 +78,9 @@ class AppColor {
   static const Color bg_color_contact = Color(0xFFF6F7F7);
   static const Color brown_231d18 = Color(0xFF231d18);
 
+  static const Color green_toast = Color(0xFF147267);
+  static const Color red_toast = Color(0xFFAB1912);
+
 }
 
 class Constants {
@@ -146,6 +149,7 @@ class Constants {
   static const String tabContact = 'Contact';
   static const String tabAppointment = 'Appointments';
   static const String yourPrivateBanker = 'Your private banker';
+  static const String yourPrivateBankers = 'Your private bankers';
   static const String bookAnAppointment = 'Book an appointment';
   static const String sendMessage = 'Send a message';
   static const String startVideoOrAudioCall = 'Start video or audio call';
