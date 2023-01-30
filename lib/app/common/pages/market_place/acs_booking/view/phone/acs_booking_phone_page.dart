@@ -428,7 +428,7 @@ class ACSBookingPhonePageState
                     ClipRRect(
                       borderRadius: BorderRadius.circular(40.0),
                       child: Image.asset(
-                        Resources.banker_img,
+                        index == 0 ? Resources.user_3 : index == 1 ? Resources.user_1 : Resources.user_2,
                         height: 40.0,
                         width: 40.0,
                         fit: BoxFit.fill,
