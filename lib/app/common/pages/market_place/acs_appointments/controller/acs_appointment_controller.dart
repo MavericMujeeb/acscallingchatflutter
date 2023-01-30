@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 class ACSAppointmentController extends BaseController {
 
   var resp;
+  var respGetBanker;
 
   var acsToken = '';
   var serviceId = '';
@@ -47,6 +48,15 @@ class ACSAppointmentController extends BaseController {
 
     // acsToken = await AppSharedPreference().getString(key: SharedPrefKey.prefs_acs_token);
 
+    /*respGetBanker = await getBankersListAPI();
+    print("Response on getBankersList API is : "+respGetBanker.toString());*/
+
+    var urlStaffMembers = Uri.parse('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceId/staffMembers/');
+    final responseStaffMember = await http.get(urlStaffMembers, headers: {"Authorization": "Bearer " + acsToken});
+
+    respGetBanker = jsonDecode(responseStaffMember.body);
+    print("Response on getBankersList API is : "+respGetBanker.toString());
+
     resp = await getAppointmentsAPI();
 
     print("Respose on getAppointments is : "+resp.toString());
@@ -54,6 +64,18 @@ class ACSAppointmentController extends BaseController {
     inProgress = false;
 
     return true;
+  }
+
+  Future getBankersListAPI() async {
+    serviceId = await AppSharedPreference()
+        .getString(key: SharedPrefKey.prefs_service_id);
+    var url = Uri.parse(
+        'https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceId/staffMembers/');
+    final response =
+    await http.get(url, headers: {"Authorization": "Bearer " + acsToken});
+
+    var convertDataToJson = jsonDecode(response.body);
+    return convertDataToJson;
   }
 
   Future getAppointmentsAPI() async {
