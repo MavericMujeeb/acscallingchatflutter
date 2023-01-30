@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:acscallingchatflutter/app/common/utils/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
@@ -14,7 +15,6 @@ import 'package:acscallingchatflutter/app/widgets/custom_text.dart';
 import 'package:acscallingchatflutter/data/helpers/shared_preferences.dart';
 import 'package:acscallingchatflutter/data/repositories/acs_chat_calling_repositories.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-// import 'package:marketplace/data/repositories/acs_chat_calling_repository.dart';
 
 import '../../../../../utils/constants.dart';
 import '../../controller/acs_booking_controller.dart';
@@ -73,7 +73,8 @@ class ACSBookingPhonePageState
   late final WebViewController _controller;
   var strCodeResaponseURL = '';
 
-  var strGetCodeUrl = 'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/authorize?response_type=code&client_id=e6197263-b986-4f08-9a27-08a4ec1b5c8e&scope=https://graph.microsoft.com/.default&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&state=12345';
+  var strGetCodeUrl =
+      'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/authorize?response_type=code&client_id=e6197263-b986-4f08-9a27-08a4ec1b5c8e&scope=https://graph.microsoft.com/.default&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&state=12345';
 
   @override
   void initState() {
@@ -81,7 +82,6 @@ class ACSBookingPhonePageState
     super.initState();
 
     getBankersList();
-
   }
 
   void getBankersList() async {
@@ -92,9 +92,8 @@ class ACSBookingPhonePageState
     acsBookingController!.selectedBankerEmailId = acsBookingController!
         .respGetBanker['value'][0]['emailAddress']
         .toString();
-    acsBookingController!.selectedBankerId = acsBookingController!
-        .respGetBanker['value'][0]['id']
-        .toString();
+    acsBookingController!.selectedBankerId =
+        acsBookingController!.respGetBanker['value'][0]['id'].toString();
     acsBookingController!.selectedBankerName = acsBookingController!
         .respGetBanker['value'][0]['displayName']
         .toString();
@@ -117,17 +116,19 @@ class ACSBookingPhonePageState
           },
           onPageStarted: (String url) {},
           onPageFinished: (String url) {
-            print("OnFinished response url is : "+url.toString());
-            if(url.contains('browser-callback?')){
+            print("OnFinished response url is : " + url.toString());
+            if (url.contains('browser-callback?')) {
               strCodeResaponseURL = url.toString();
               List<String> strSplitURL = strCodeResaponseURL.split("code=");
               // acsBookingController!.strCode = strSplitURL[1];
               var strCodeWithStateSession = strSplitURL[1];
 
-              List<String> strSplitURL1 = strCodeWithStateSession.split("&state=");
+              List<String> strSplitURL1 =
+                  strCodeWithStateSession.split("&state=");
               acsBookingController!.strCode = strSplitURL1[0];
 
-              print("Code on response is : "+acsBookingController!.strCode.toString());
+              print("Code on response is : " +
+                  acsBookingController!.strCode.toString());
 
               isWebView = false;
 
@@ -141,24 +142,25 @@ class ACSBookingPhonePageState
   }
 
   getAppoinments(int weekday, String date) async {
-    getScheduleResponse = await acsBookingController?.getAwailableSlots(weekday, date);
+    getScheduleResponse =
+        await acsBookingController?.getAwailableSlots(weekday, date);
     // _selected = List.generate(timeslots.length, (i) => false);
     //_selected[0] = true;
     availableTimeSlots = getScheduleResponse['value'] != null &&
-        getScheduleResponse['value'].length > 0 &&
-        getScheduleResponse['value'][0]['availabilityView'] != null
+            getScheduleResponse['value'].length > 0 &&
+            getScheduleResponse['value'][0]['availabilityView'] != null
         ? getScheduleResponse['value'][0]['availabilityView'].split('')
         : "000000000".split('');
     var startWorkingHr = getScheduleResponse['value'] != null &&
-        getScheduleResponse['value'].length > 0 &&
-        getScheduleResponse['value'][0]['workingHours'] != null &&
-        getScheduleResponse['value'][0]['workingHours']['startTime'] != null
+            getScheduleResponse['value'].length > 0 &&
+            getScheduleResponse['value'][0]['workingHours'] != null &&
+            getScheduleResponse['value'][0]['workingHours']['startTime'] != null
         ? getScheduleResponse['value'][0]['workingHours']['startTime']
         : "08:00:00.0000000";
     var endWorkingHr = getScheduleResponse['value'] != null &&
-        getScheduleResponse['value'].length > 0 &&
-        getScheduleResponse['value'][0]['workingHours'] != null &&
-        getScheduleResponse['value'][0]['workingHours']['endTime'] != null
+            getScheduleResponse['value'].length > 0 &&
+            getScheduleResponse['value'][0]['workingHours'] != null &&
+            getScheduleResponse['value'][0]['workingHours']['endTime'] != null
         ? getScheduleResponse['value'][0]['workingHours']['endTime']
         : "17:00:00.0000000";
 
@@ -173,14 +175,27 @@ class ACSBookingPhonePageState
   }
 
   bookAnAppointment() async {
-    await acsBookingController!.actionBookAppointment("eyJ0eXAiOiJKV1QiLCJub25jZSI6InZZRGs0YS1jQkNLVGx6S2gxdXhIOVNoeXNPekYwN0RaWnJXN1VWa09vV0UiLCJhbGciOiJSUzI1NiIsIng1dCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyIsImtpZCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyJ9.eyJhdWQiOiJodHRwczovL2dyYXBoLm1pY3Jvc29mdC5jb20iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC80YzQ5ODVmZS1jZThlLTRjMmYtOTdlNi1iMDM3ODUwYjc3N2QvIiwiaWF0IjoxNjc0NzY4NDkzLCJuYmYiOjE2NzQ3Njg0OTMsImV4cCI6MTY3NDc3MzM3NCwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFWUUFxLzhUQUFBQWoxMDdZcllBVWlmWVJoN2dDWkRvdEFPMHkwVThIWlI3U0tZdW1rWkxmQjhxc1Rlc2VxUlVDOVNPVnJQZXRmS1R0dEczRDVzNXlxTWNDTXhocEsxYnYza2JzY1ZZdzFkV0pNbXk0a0hEc2NNPSIsImFtciI6WyJwd2QiLCJtZmEiXSwiYXBwX2Rpc3BsYXluYW1lIjoiUG9zdG1hbiBNUyBHcmFwaCIsImFwcGlkIjoiZTYxOTcyNjMtYjk4Ni00ZjA4LTlhMjctMDhhNGVjMWI1YzhlIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJQYW5keWEiLCJnaXZlbl9uYW1lIjoiTmFuZGFuIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMTkyLjE5My4xODYuMzYiLCJuYW1lIjoiTmFuZGFuIFBhbmR5YSIsIm9pZCI6ImZhNTg4N2ViLTdhNjYtNDgxZC1iNjFlLTcxNzFlZWFlZjQ5MSIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwMjY4NTk5ODhEIiwicmgiOiIwLkFYd0Ffb1ZKVEk3T0wweVg1ckEzaFF0M2ZRTUFBQUFBQUFBQXdBQUFBQUFBQUFDN0FEQS4iLCJzY3AiOiJCb29raW5ncy5NYW5hZ2UuQWxsIEJvb2tpbmdzLlJlYWQuQWxsIEJvb2tpbmdzLlJlYWRXcml0ZS5BbGwgQm9va2luZ3NBcHBvaW50bWVudC5SZWFkV3JpdGUuQWxsIENhbGVuZGFycy5SZWFkLlNoYXJlZCBDYWxlbmRhcnMuUmVhZFdyaXRlIENhbGVuZGFycy5SZWFkV3JpdGUuU2hhcmVkIENyb3NzVGVuYW50SW5mb3JtYXRpb24uUmVhZEJhc2ljLkFsbCBDcm9zc1RlbmFudFVzZXJQcm9maWxlU2hhcmluZy5SZWFkV3JpdGUgRGVsZWdhdGVkQWRtaW5SZWxhdGlvbnNoaXAuUmVhZFdyaXRlLkFsbCBHcm91cE1lbWJlci5SZWFkV3JpdGUuQWxsIE1haWwuUmVhZFdyaXRlIE1haWwuUmVhZFdyaXRlLlNoYXJlZCBNYWlsLlNlbmQgTWFpbC5TZW5kLlNoYXJlZCBPbmxpbmVNZWV0aW5ncy5SZWFkV3JpdGUgU2NoZWR1bGUuUmVhZFdyaXRlLkFsbCBUYXNrcy5SZWFkV3JpdGUgVGVhbS5DcmVhdGUgVGVhbS5SZWFkQmFzaWMuQWxsIFVzZXIuUmVhZCBVc2VyLlJlYWRXcml0ZSBVc2VyLlJlYWRXcml0ZS5BbGwgcHJvZmlsZSBvcGVuaWQgZW1haWwiLCJzaWduaW5fc3RhdGUiOlsia21zaSJdLCJzdWIiOiJuMGE3Y01EVmFJSjA3MHk5cXZzNDlXVGJfenFRRktVdXE1cTUxNU0yNDRnIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6Ik5BIiwidGlkIjoiNGM0OTg1ZmUtY2U4ZS00YzJmLTk3ZTYtYjAzNzg1MGI3NzdkIiwidW5pcXVlX25hbWUiOiJOYW5kYTFAMjdyNGw1Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Ik5hbmRhMUAyN3I0bDUub25taWNyb3NvZnQuY29tIiwidXRpIjoic1FxLWRWSkRIMG1wTDN2Snd5SFBBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiZjAyM2ZkODEtYTYzNy00YjU2LTk1ZmQtNzkxYWMwMjI2MDMzIiwiNjkwOTEyNDYtMjBlOC00YTU2LWFhNGQtMDY2MDc1YjJhN2E4IiwiZmU5MzBiZTctNWU2Mi00N2RiLTkxYWYtOThjM2E0OWEzOGIxIiwiZjJlZjk5MmMtM2FmYi00NmI5LWI3Y2YtYTEyNmVlNzRjNDUxIiwiZjI4YTFmNTAtZjZlNy00NTcxLTgxOGItNmExMmYyYWY2YjZjIiwiNzI5ODI3ZTMtOWMxNC00OWY3LWJiMWItOTYwOGYxNTZiYmI4IiwiMjkyMzJjZGYtOTMyMy00MmZkLWFkZTItMWQwOTdhZjNlNGRlIiwiNjJlOTAzOTQtNjlmNS00MjM3LTkxOTAtMDEyMTc3MTQ1ZTEwIiwiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il0sInhtc19zdCI6eyJzdWIiOiJsMS1jU0xtT1JseFFCeXVUdjZkbWFfcXVGWUV1TFl0Sno2c3pNc2JyQ01FIn0sInhtc190Y2R0IjoxNjcxMTA1Njk1fQ.XnhvSUQussTlg5h-BHhlLKHSPyEqvTiEcOUI8nibUoHFWgehUl3DfAOl1xYOmhA-nM17HQs00u0I43O-kv38BbQUHjaL7IX3gJtQIMCqJR-bz5n73JlUC8M-en8tbVQ2KYgPGwvC7R3ipEerRnDjF-Hy89BAMleeNI7taRnTPKyipftZ2VPv1UlZD5OPcKQWpBXmPH7Tojr9qJ29lCYqRGguBjtM9DlE5s8v9SwqbiukxwUm_UPnIOyG2XGNfq30HnJ_YzjtV1I3G5nb9Fm1rNZQ_f5lxaAEOm1e6qWY0IFNN6VUv5FiR2kN06Oh-Jfu4B3B758uA7QiRTXKb_H8UA");
+    await acsBookingController!.actionBookAppointment(
+        "eyJ0eXAiOiJKV1QiLCJub25jZSI6InZZRGs0YS1jQkNLVGx6S2gxdXhIOVNoeXNPekYwN0RaWnJXN1VWa09vV0UiLCJhbGciOiJSUzI1NiIsIng1dCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyIsImtpZCI6Ii1LSTNROW5OUjdiUm9meG1lWm9YcWJIWkdldyJ9.eyJhdWQiOiJodHRwczovL2dyYXBoLm1pY3Jvc29mdC5jb20iLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC80YzQ5ODVmZS1jZThlLTRjMmYtOTdlNi1iMDM3ODUwYjc3N2QvIiwiaWF0IjoxNjc0NzY4NDkzLCJuYmYiOjE2NzQ3Njg0OTMsImV4cCI6MTY3NDc3MzM3NCwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFWUUFxLzhUQUFBQWoxMDdZcllBVWlmWVJoN2dDWkRvdEFPMHkwVThIWlI3U0tZdW1rWkxmQjhxc1Rlc2VxUlVDOVNPVnJQZXRmS1R0dEczRDVzNXlxTWNDTXhocEsxYnYza2JzY1ZZdzFkV0pNbXk0a0hEc2NNPSIsImFtciI6WyJwd2QiLCJtZmEiXSwiYXBwX2Rpc3BsYXluYW1lIjoiUG9zdG1hbiBNUyBHcmFwaCIsImFwcGlkIjoiZTYxOTcyNjMtYjk4Ni00ZjA4LTlhMjctMDhhNGVjMWI1YzhlIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJQYW5keWEiLCJnaXZlbl9uYW1lIjoiTmFuZGFuIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMTkyLjE5My4xODYuMzYiLCJuYW1lIjoiTmFuZGFuIFBhbmR5YSIsIm9pZCI6ImZhNTg4N2ViLTdhNjYtNDgxZC1iNjFlLTcxNzFlZWFlZjQ5MSIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwMjY4NTk5ODhEIiwicmgiOiIwLkFYd0Ffb1ZKVEk3T0wweVg1ckEzaFF0M2ZRTUFBQUFBQUFBQXdBQUFBQUFBQUFDN0FEQS4iLCJzY3AiOiJCb29raW5ncy5NYW5hZ2UuQWxsIEJvb2tpbmdzLlJlYWQuQWxsIEJvb2tpbmdzLlJlYWRXcml0ZS5BbGwgQm9va2luZ3NBcHBvaW50bWVudC5SZWFkV3JpdGUuQWxsIENhbGVuZGFycy5SZWFkLlNoYXJlZCBDYWxlbmRhcnMuUmVhZFdyaXRlIENhbGVuZGFycy5SZWFkV3JpdGUuU2hhcmVkIENyb3NzVGVuYW50SW5mb3JtYXRpb24uUmVhZEJhc2ljLkFsbCBDcm9zc1RlbmFudFVzZXJQcm9maWxlU2hhcmluZy5SZWFkV3JpdGUgRGVsZWdhdGVkQWRtaW5SZWxhdGlvbnNoaXAuUmVhZFdyaXRlLkFsbCBHcm91cE1lbWJlci5SZWFkV3JpdGUuQWxsIE1haWwuUmVhZFdyaXRlIE1haWwuUmVhZFdyaXRlLlNoYXJlZCBNYWlsLlNlbmQgTWFpbC5TZW5kLlNoYXJlZCBPbmxpbmVNZWV0aW5ncy5SZWFkV3JpdGUgU2NoZWR1bGUuUmVhZFdyaXRlLkFsbCBUYXNrcy5SZWFkV3JpdGUgVGVhbS5DcmVhdGUgVGVhbS5SZWFkQmFzaWMuQWxsIFVzZXIuUmVhZCBVc2VyLlJlYWRXcml0ZSBVc2VyLlJlYWRXcml0ZS5BbGwgcHJvZmlsZSBvcGVuaWQgZW1haWwiLCJzaWduaW5fc3RhdGUiOlsia21zaSJdLCJzdWIiOiJuMGE3Y01EVmFJSjA3MHk5cXZzNDlXVGJfenFRRktVdXE1cTUxNU0yNDRnIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6Ik5BIiwidGlkIjoiNGM0OTg1ZmUtY2U4ZS00YzJmLTk3ZTYtYjAzNzg1MGI3NzdkIiwidW5pcXVlX25hbWUiOiJOYW5kYTFAMjdyNGw1Lm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Ik5hbmRhMUAyN3I0bDUub25taWNyb3NvZnQuY29tIiwidXRpIjoic1FxLWRWSkRIMG1wTDN2Snd5SFBBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiZjAyM2ZkODEtYTYzNy00YjU2LTk1ZmQtNzkxYWMwMjI2MDMzIiwiNjkwOTEyNDYtMjBlOC00YTU2LWFhNGQtMDY2MDc1YjJhN2E4IiwiZmU5MzBiZTctNWU2Mi00N2RiLTkxYWYtOThjM2E0OWEzOGIxIiwiZjJlZjk5MmMtM2FmYi00NmI5LWI3Y2YtYTEyNmVlNzRjNDUxIiwiZjI4YTFmNTAtZjZlNy00NTcxLTgxOGItNmExMmYyYWY2YjZjIiwiNzI5ODI3ZTMtOWMxNC00OWY3LWJiMWItOTYwOGYxNTZiYmI4IiwiMjkyMzJjZGYtOTMyMy00MmZkLWFkZTItMWQwOTdhZjNlNGRlIiwiNjJlOTAzOTQtNjlmNS00MjM3LTkxOTAtMDEyMTc3MTQ1ZTEwIiwiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il0sInhtc19zdCI6eyJzdWIiOiJsMS1jU0xtT1JseFFCeXVUdjZkbWFfcXVGWUV1TFl0Sno2c3pNc2JyQ01FIn0sInhtc190Y2R0IjoxNjcxMTA1Njk1fQ.XnhvSUQussTlg5h-BHhlLKHSPyEqvTiEcOUI8nibUoHFWgehUl3DfAOl1xYOmhA-nM17HQs00u0I43O-kv38BbQUHjaL7IX3gJtQIMCqJR-bz5n73JlUC8M-en8tbVQ2KYgPGwvC7R3ipEerRnDjF-Hy89BAMleeNI7taRnTPKyipftZ2VPv1UlZD5OPcKQWpBXmPH7Tojr9qJ29lCYqRGguBjtM9DlE5s8v9SwqbiukxwUm_UPnIOyG2XGNfq30HnJ_YzjtV1I3G5nb9Fm1rNZQ_f5lxaAEOm1e6qWY0IFNN6VUv5FiR2kN06Oh-Jfu4B3B758uA7QiRTXKb_H8UA");
     //await acsBookingController!.getBookingDelegateToken();
 
-    if(acsBookingController!.respBooking.toString() == "Error") {
-      showToast("Something went wrong, please try again");
+    if (acsBookingController!.respBooking.toString() == "Error") {
+      // showToast("Something went wrong, please try again");
+      CustomSnackBar().showToast(context, "Something went wrong, please try again", false);
     } else {
       // Navigate to previous screen..
-      showToast("Booking is completed on "+ acsBookingController!.defaultDate + " at "+acsBookingController!.pickedStartTime + " with "+acsBookingController!.selectedBankerName);
+      /*showToast("Booking is completed on " +
+          acsBookingController!.defaultDate +
+          " at " +
+          acsBookingController!.pickedStartTime +
+          " with " +
+          acsBookingController!.selectedBankerName);*/
+      CustomSnackBar().showToast(context, "Booking is completed on " +
+          acsBookingController!.defaultDate +
+          " at " +
+          acsBookingController!.pickedStartTime +
+          " with " +
+          acsBookingController!.selectedBankerName, true);
       // If in success we want to go back to previous screen use below code.
       popScreen(context);
     }
@@ -189,41 +204,41 @@ class ACSBookingPhonePageState
   }
 
   Widget get loadWebView => Container(
-    height: double.infinity,
-    width: double.infinity,
-    child: Column(
-      children: [
-        Container(
-          height: 60,
-          width: double.infinity,
-          color: Colors.blueGrey,
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  isWebView = false;
-                  setState(() {});
-                },
-                child: Icon(
-                  Icons.cancel_outlined,
-                  size: 40,
-                  color: Colors.black,
-                ),
+        height: double.infinity,
+        width: double.infinity,
+        child: Column(
+          children: [
+            Container(
+              height: 60,
+              width: double.infinity,
+              color: Colors.blueGrey,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      isWebView = false;
+                      setState(() {});
+                    },
+                    child: Icon(
+                      Icons.cancel_outlined,
+                      size: 40,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Expanded(
+              child: Container(
+                color: Colors.white,
+                child: WebViewWidget(controller: _controller),
+              ),
+            ),
+          ],
         ),
-        Expanded(
-          child: Container(
-            color: Colors.white,
-            child:  WebViewWidget(controller: _controller),
-          ),
-        ),
-      ],
-    ),
-  );
+      );
 
   @override
   Widget get view => Scaffold(
@@ -286,18 +301,20 @@ class ACSBookingPhonePageState
         ],
       );
 
-  void showToast(String strMsg) {
-    final snackBar = SnackBar(
-      content: Text(strMsg.toString()),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   Widget bottomBookingButton() => GestureDetector(
         onTap: () {
-          if(acsBookingController!.pickedStartTime == "" || acsBookingController!.pickedEndTime == "") {
-            showToast(Constants.selectTimeSlotMsg);
+          if (acsBookingController!.pickedStartTime == "" ||
+              acsBookingController!.pickedEndTime == "") {
+            // showToast(Constants.selectTimeSlotMsg);
+            CustomSnackBar().showToast(context, Constants.selectTimeSlotMsg, false);
+            /*Fluttertoast.showToast(
+                msg: "This is Center Short Toast",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 16.0);*/
           } else {
             //setWebviewController();
             isWebView = false;
@@ -384,7 +401,9 @@ class ACSBookingPhonePageState
           acsBookingController!.selectedBankerId = acsBookingController!
               .respGetBanker['value'][index]['id']
               .toString();
-          acsBookingController!.selectedBankerName = acsBookingController!.respGetBanker['value'][index]['displayName'].toString();
+          acsBookingController!.selectedBankerName = acsBookingController!
+              .respGetBanker['value'][index]['displayName']
+              .toString();
 
           acsBookingController!.pickedStartTime = "";
           acsBookingController!.pickedEndTime = "";
@@ -513,10 +532,13 @@ class ACSBookingPhonePageState
 
   Widget slotCellItem(int index) => GestureDetector(
         onTap: () => {
-          if(int.parse(availableTimeSlots[index])!=0) {
-          //Handle event for time slots not available
-          } else {
-            //Handle event for time slots available
+          if (int.parse(availableTimeSlots[index]) != 0)
+            {
+              //Handle event for time slots not available
+            }
+          else
+            {
+              //Handle event for time slots available
               refreshTimeSlotsUI(index),
               splitTime = timeslots[index].split('-'),
               acsBookingController!.pickedStartTime = splitTime[0].trim(),
@@ -524,12 +546,13 @@ class ACSBookingPhonePageState
             }
         },
         child: Card(
-          color: availableTimeSlots != null
-              && availableTimeSlots.length > 0
-              && int.parse(availableTimeSlots[index])!=0
-              ? AppColor.grey_color_300 : _selected[index]
-              ? AppColor.brown_231d18
-              : Colors.white,
+          color: availableTimeSlots != null &&
+                  availableTimeSlots.length > 0 &&
+                  int.parse(availableTimeSlots[index]) != 0
+              ? AppColor.grey_color_300
+              : _selected[index]
+                  ? AppColor.brown_231d18
+                  : Colors.white,
           elevation: 2.0,
           margin: EdgeInsets.only(top: spacing_10),
           shadowColor: Colors.black,
@@ -546,13 +569,13 @@ class ACSBookingPhonePageState
               textAlign: TextAlign.center,
               fontSize: 14,
               fontWeight: FontWeight.w300,
-              textColor: availableTimeSlots != null
-                  && availableTimeSlots.length >0
-                  && int.parse(availableTimeSlots[index])!=0
+              textColor: availableTimeSlots != null &&
+                      availableTimeSlots.length > 0 &&
+                      int.parse(availableTimeSlots[index]) != 0
                   ? Colors.black
                   : _selected[index]
-                  ? Colors.white
-                  : Colors.black,
+                      ? Colors.white
+                      : Colors.black,
             ),
           ),
         ),

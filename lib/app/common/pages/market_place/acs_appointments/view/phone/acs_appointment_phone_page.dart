@@ -140,9 +140,9 @@ class ACSAppointmentPhonePageState
                                 Navigator.of(context)
                                     .pushNamed(Pages.screen_booking)
                                     .then((value) => {
-                                      getAppointmentList(),
-                                      setState(() {}),
-                                    });
+                                          getAppointmentList(),
+                                          setState(() {}),
+                                        });
                               });
                             }
                           },
@@ -155,27 +155,26 @@ class ACSAppointmentPhonePageState
                         ),
                       ),
                       Positioned(
-                        top: 14,
-                        left: 14,
-                        right: 14,
-                        bottom: 80,
-                        child: acsAppointmentController!.inProgress
-                            ? Container(
-                                height: double.infinity,
-                                width: double.infinity,
-                                // color: Colors.black12,
-                                // color: AppColor.black_trans,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              )
-                            : acsAppointmentController!.resp != null &&
+                          top: 14,
+                          left: 14,
+                          right: 14,
+                          bottom: 80,
+                          child: acsAppointmentController!.inProgress
+                              ? Container(
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  // color: Colors.black12,
+                                  // color: AppColor.black_trans,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                )
+                              : listColumnStaffAppointment
+                          /*: acsAppointmentController!.resp != null &&
                                     acsAppointmentController!.resp['value'] !=
                                         null &&
                                     acsAppointmentController!
-                                            .resp['value'].length >
-                                        0
-                                // ? listAppointments
+                                            .resp['value'].length > 0
                                 ? listAppointments
                                 : Center(
                                     child: CustomText(
@@ -183,8 +182,8 @@ class ACSAppointmentPhonePageState
                                         textAlign: TextAlign.center,
                                         fontSize: 14,
                                         fontWeight: FontWeight.normal),
-                                  ),
-                      ),
+                                  ),*/
+                          ),
                     ],
                   ),
                 ],
@@ -193,6 +192,38 @@ class ACSAppointmentPhonePageState
           ),
         ],
       );
+
+  Widget get listColumnStaffAppointment => SingleChildScrollView(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        vSpacer(6),
+        CustomText(textName: Constants.yourPrivateBankers, textAlign: TextAlign.left, fontSize: 16, fontWeight: FontWeight.w500),
+        vSpacer(12),
+        SizedBox(
+          height: 120,
+          child: acsAppointmentController!.respGetBanker != null &&
+              acsAppointmentController!.respGetBanker['value'].length > 0
+              ? listBankers()
+              : const Center(
+                child: CircularProgressIndicator(),
+              ),
+        ),
+        vSpacer(18),
+        acsAppointmentController!.resp != null &&
+                acsAppointmentController!.resp['value'] != null &&
+                acsAppointmentController!.resp['value'].length > 0
+            ? listAppointments
+            : Center(
+                child: CustomText(
+                    textName: Constants.noAppointments,
+                    textAlign: TextAlign.center,
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal),
+              ),
+      ],
+    ),
+  );
 
   Widget get appointmentContent => Expanded(
         child: Stack(
@@ -214,11 +245,67 @@ class ACSAppointmentPhonePageState
         color: AppColor.black_color_54,
       );
 
+  Widget listBankers() => ListView.builder(
+      // physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.horizontal,
+      // shrinkWrap: true,
+      // itemCount: 10,
+      itemCount: acsAppointmentController!.respGetBanker['value'].length,
+      itemBuilder: (BuildContext context, int index) {
+        return bankerListCell(index);
+      });
+
   Widget get listAppointments => ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
       itemCount: acsAppointmentController!.resp['value'].length,
       itemBuilder: (BuildContext context, int index) {
         return appointmentCellItem(index);
       });
+
+  Widget bankerListCell(int index) => Container(
+    width: MediaQuery.of(context).size.width / 2.15,
+    child: Card(
+      color: Colors.white,
+      elevation: 2.0,
+      shadowColor: Colors.black,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(spacing_14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(40.0),
+              child: Image.asset(
+                Resources.banker_img,
+                height: 40.0,
+                width: 40.0,
+                fit: BoxFit.fill,
+              ),
+            ),
+            vSpacer(spacing_8),
+            CustomText(
+                textName: acsAppointmentController!
+                    .respGetBanker['value'][index]['displayName']
+                    .toString(),
+                textAlign: TextAlign.start,
+                fontSize: 15,
+                fontWeight: FontWeight.w300),
+            vSpacer(spacing_4),
+            CustomText(
+                textName: 'Private Banker',
+                textAlign: TextAlign.start,
+                fontSize: 10,
+                fontWeight: FontWeight.w200),
+          ],
+        ),
+      ),
+    ),
+  );
 
   Widget appointmentCellItem(int index) => Container(
         // height: 174,
