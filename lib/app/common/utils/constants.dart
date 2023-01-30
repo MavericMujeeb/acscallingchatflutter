@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class Resources {
   static const String login_banner = 'assets/images/login_banner.png';
   static const String banker_img = 'assets/images/banner.png';
+  static const String user_1 = 'assets/images/user_1.png';
+  static const String user_2 = 'assets/images/user_2.png';
+  static const String user_3 = 'assets/images/user_3.png';
   static const String addepar_img = 'assets/images/addepar.jpeg';
   static const String advisor_metrix_img = 'assets/images/advisor_metrix.png';
   static const String money_quotient_img = 'assets/images/money_quotient.png';
