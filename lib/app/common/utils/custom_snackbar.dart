@@ -22,6 +22,7 @@ class CustomSnackBar {
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Text(
                 strMsg.toString(),
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 13,

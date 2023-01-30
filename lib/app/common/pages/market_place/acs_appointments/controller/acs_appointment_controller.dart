@@ -26,9 +26,7 @@ class ACSAppointmentController extends BaseController {
   Future getToken() async {
 
     inProgress = true;
-
-    serviceId = await AppSharedPreference()
-        .getString(key: SharedPrefKey.prefs_service_id);
+    serviceId = Constants.service_email_id;
     var url = Uri.parse(
         'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/token');
     final response = await http.post(url, body: {
@@ -51,15 +49,18 @@ class ACSAppointmentController extends BaseController {
     /*respGetBanker = await getBankersListAPI();
     print("Response on getBankersList API is : "+respGetBanker.toString());*/
 
-    var urlStaffMembers = Uri.parse('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceId/staffMembers/');
-    final responseStaffMember = await http.get(urlStaffMembers, headers: {"Authorization": "Bearer " + acsToken});
+    respGetBanker = await getBankersListAPI();
 
-    respGetBanker = jsonDecode(responseStaffMember.body);
     print("Response on getBankersList API is : "+respGetBanker.toString());
 
     resp = await getAppointmentsAPI();
+    //var removedCancelledMeetingList = await getAppointmentsAPI();
+
+   // resp = removedCancelledMeetingList['value'].where((item) => item['isCancelled'] == false ).toList();
 
     print("Respose on getAppointments is : "+resp.toString());
+
+    //print("Respose on getAppointments is filter : "+removedCancelledMeetingList.toString());
 
     inProgress = false;
 
@@ -80,14 +81,14 @@ class ACSAppointmentController extends BaseController {
 
   Future getAppointmentsAPI() async {
     var nowDate = DateTime.now();
-    var thirtydaysDate = DateTime(nowDate.year, nowDate.month, nowDate.day + 31);
+    var thirtydaysDate = DateTime(nowDate.year, nowDate.month, nowDate.day + 30);
     var format = DateFormat('yyyy-MM-dd');
     var timeformat = DateFormat('HH:mm');
     String currentDate = format.format(nowDate);
     String oneMonthDate = format.format(thirtydaysDate);
     String currentTime = timeformat.format(nowDate);
     String finalstartDate = "${currentDate}T$currentTime:00-08:00";
-    String finalendDate = "${oneMonthDate}T00:00:00-08:00";
+    String finalendDate = "${oneMonthDate}T23:58:00-08:00";
     // print(currentDate);
     // print(oneMonthDate);
     // print(currentTime);
