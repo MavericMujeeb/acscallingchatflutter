@@ -200,7 +200,7 @@ class ACSBookingController extends BaseController {
       "endDateTime": {
         "@odata.type": "#microsoft.graph.dateTimeTimeZone",
         "dateTime": defaultDate+"T"+pickedEndTime+":00.0000000+00:00",
-        "timeZone": "UTC"
+        "timeZone": "CST"
       },
       "isLocationOnline": true,
       "optOutOfCustomerEmail": false,
@@ -259,12 +259,12 @@ class ACSBookingController extends BaseController {
         "uniqueIdType@odata.type": "#microsoft.graph.locationUniqueIdType",
         "uniqueIdType": null
       },
-      "serviceName": "30 Min meeting",
+      "serviceName": "30-min meeting",
       "serviceNotes": "Customer requires punctual service.",
       "startDateTime": {
         "@odata.type": "#microsoft.graph.dateTimeTimeZone",
         "dateTime": defaultDate+"T"+pickedStartTime+":00.0000000+00:00",
-        "timeZone": "UTC"
+        "timeZone": "CST"
       },
       "maximumAttendeesCount": 1,
       "filledAttendeesCount": 1,
@@ -274,7 +274,7 @@ class ACSBookingController extends BaseController {
           "@odata.type": "#microsoft.graph.bookingCustomerInformation",
           "customerId": "a2194b29-07bb-48bb-8607-6151334cf904",
           "name": "Janet Johnson",
-          "emailAddress": "acharya.83@gmail.com",
+          "emailAddress": "janetjohnsonfamily83@gmail.com",
           "phone": "862-228-7032",
           "notes": null,
           "location": {

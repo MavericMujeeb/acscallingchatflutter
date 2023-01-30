@@ -24,8 +24,7 @@ class ACSAppointmentPhonePage extends View {
   ACSAppointmentPhonePageState createState() => ACSAppointmentPhonePageState();
 }
 
-class ACSAppointmentPhonePageState
-    // extends ViewState<ACSAppointmentPhonePage, ACSAppointmentController> {
+class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage, ACSAppointmentController> {
     extends State<ACSAppointmentPhonePage> {
   // ACSAppointmentPhonePageState(): super(ACSAppointmentController(ACSChatCallingDataRepository()));
 
@@ -194,36 +193,41 @@ class ACSAppointmentPhonePageState
       );
 
   Widget get listColumnStaffAppointment => SingleChildScrollView(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        vSpacer(6),
-        CustomText(textName: Constants.yourPrivateBankers, textAlign: TextAlign.left, fontSize: 16, fontWeight: FontWeight.w500),
-        vSpacer(12),
-        SizedBox(
-          height: 120,
-          child: acsAppointmentController!.respGetBanker != null &&
-              acsAppointmentController!.respGetBanker['value'].length > 0
-              ? listBankers()
-              : const Center(
-                child: CircularProgressIndicator(),
-              ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            vSpacer(6),
+            CustomText(
+                textName: Constants.yourPrivateBankers,
+                textAlign: TextAlign.left,
+                fontSize: 16,
+                fontWeight: FontWeight.w500),
+            vSpacer(12),
+            SizedBox(
+              height: 120,
+              child: acsAppointmentController!.respGetBanker != null &&
+                      acsAppointmentController!.respGetBanker['value'].length >
+                          0
+                  ? listBankers()
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+            ),
+            vSpacer(18),
+            acsAppointmentController!.resp != null &&
+                    acsAppointmentController!.resp['value'] != null &&
+                    acsAppointmentController!.resp['value'].length > 0
+                ? listAppointments
+                : Center(
+                    child: CustomText(
+                        textName: Constants.noAppointments,
+                        textAlign: TextAlign.center,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal),
+                  ),
+          ],
         ),
-        vSpacer(18),
-        acsAppointmentController!.resp != null &&
-                acsAppointmentController!.resp['value'] != null &&
-                acsAppointmentController!.resp['value'].length > 0
-            ? listAppointments
-            : Center(
-                child: CustomText(
-                    textName: Constants.noAppointments,
-                    textAlign: TextAlign.center,
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal),
-              ),
-      ],
-    ),
-  );
+      );
 
   Widget get appointmentContent => Expanded(
         child: Stack(
@@ -250,7 +254,7 @@ class ACSAppointmentPhonePageState
       scrollDirection: Axis.horizontal,
       // shrinkWrap: true,
       // itemCount: 10,
-      itemCount: acsAppointmentController!.respGetBanker['value'].length,
+      itemCount: /*acsAppointmentController!.respGetBanker['value'].length*/ 1,
       itemBuilder: (BuildContext context, int index) {
         return bankerListCell(index);
       });
@@ -264,48 +268,52 @@ class ACSAppointmentPhonePageState
       });
 
   Widget bankerListCell(int index) => Container(
-    width: MediaQuery.of(context).size.width / 2.15,
-    child: Card(
-      color: Colors.white,
-      elevation: 2.0,
-      shadowColor: Colors.black,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(spacing_14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(40.0),
-              child: Image.asset(
-                index == 0 ? Resources.user_3 : index == 1 ? Resources.user_1 : Resources.user_2,
-                height: 40.0,
-                width: 40.0,
-                fit: BoxFit.fill,
-              ),
+        width: MediaQuery.of(context).size.width - 30,
+        child: Card(
+          color: Colors.white,
+          elevation: 2.0,
+          shadowColor: Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(spacing_14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(40.0),
+                  child: Image.asset(
+                    index == 0
+                        ? Resources.user_3
+                        : index == 1
+                            ? Resources.user_1
+                            : Resources.user_2,
+                    height: 40.0,
+                    width: 40.0,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                vSpacer(spacing_8),
+                CustomText(
+                    textName: acsAppointmentController!.respGetBanker['value']
+                            [index]['displayName']
+                        .toString(),
+                    textAlign: TextAlign.start,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w300),
+                vSpacer(spacing_4),
+                CustomText(
+                    textName: 'Private Banker',
+                    textAlign: TextAlign.start,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w200),
+              ],
             ),
-            vSpacer(spacing_8),
-            CustomText(
-                textName: acsAppointmentController!
-                    .respGetBanker['value'][index]['displayName']
-                    .toString(),
-                textAlign: TextAlign.start,
-                fontSize: 15,
-                fontWeight: FontWeight.w300),
-            vSpacer(spacing_4),
-            CustomText(
-                textName: 'Private Banker',
-                textAlign: TextAlign.start,
-                fontSize: 10,
-                fontWeight: FontWeight.w200),
-          ],
+          ),
         ),
-      ),
-    ),
-  );
+      );
 
   Widget appointmentCellItem(int index) => Container(
         // height: 174,

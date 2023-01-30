@@ -30,8 +30,7 @@ class Resources {
 
 class Strings {
   /* TRANSLATABLE STRINGS STARTS */
-  static const String app_name_lbl = 'Market Place Demo';
-
+  static const String app_name_lbl = 'ACS Calling Chat Demo';
 }
 
 class SharedPrefKey {
@@ -87,6 +86,9 @@ class AppColor {
 }
 
 class Constants {
+  //API settings config
+  static const String service_email_id = 'JohnsonFamilyBusiness1@27r4l5.onmicrosoft.com';
+
   static const String loggedInUser_key = "loggedInUser";
   static const String app_serach = 'search';
   static const String app_search_hint = "Search";
