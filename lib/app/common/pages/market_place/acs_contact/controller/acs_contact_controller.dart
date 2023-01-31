@@ -5,9 +5,13 @@ import 'package:acscallingchatflutter/app/common/utils/constants.dart';
 import 'package:acscallingchatflutter/data/helpers/shared_preferences.dart';
 import 'package:acscallingchatflutter/domain/entities/product_dao.dart';
 
-class ACSChatCallingController extends BaseController {
+class ACSContactController extends BaseController {
+  List<ProductDao> similarApps = [];
+  List<String> keyPoints = [];
 
-  ACSChatCallingController(super.repo) {
+
+  ACSContactController(super.repo) {
 
   }
+
 }
