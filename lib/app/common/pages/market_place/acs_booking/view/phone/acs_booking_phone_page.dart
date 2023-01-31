@@ -182,18 +182,23 @@ class ACSBookingPhonePageState
       CustomSnackBar().showToast(context, "Something went wrong, please try again", false);
     } else {
       // Navigate to previous screen..
-      /*showToast("Booking is completed on " +
-          acsBookingController!.defaultDate +
-          " at " +
-          acsBookingController!.pickedStartTime +
-          " with " +
-          acsBookingController!.selectedBankerName);*/
-      CustomSnackBar().showToast(context, "Booking is completed on " +
+      Constants.isSnackbarVisible = true;
+      Constants.snackbarMsg = "Booking is completed on " +
           acsBookingController!.defaultDate +
           " at\n " +
           acsBookingController!.pickedStartTime +
           " with " +
-          acsBookingController!.selectedBankerName, true);
+          acsBookingController!.selectedBankerName;
+      Constants.snackbarType = true;
+      setState(() {
+
+      });
+      /*CustomSnackBar().showToast(context, "Booking is completed on " +
+          acsBookingController!.defaultDate +
+          " at\n " +
+          acsBookingController!.pickedStartTime +
+          " with " +
+          acsBookingController!.selectedBankerName, true);*/
       // If in success we want to go back to previous screen use below code.
       popScreen(context);
     }
@@ -305,14 +310,7 @@ class ACSBookingPhonePageState
               acsBookingController!.pickedEndTime == "") {
             // showToast(Constants.selectTimeSlotMsg);
             CustomSnackBar().showToast(context, Constants.selectTimeSlotMsg, false);
-            /*Fluttertoast.showToast(
-                msg: "This is Center Short Toast",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0);*/
+
           } else {
             //setWebviewController();
             isWebView = false;

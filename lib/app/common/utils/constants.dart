@@ -148,6 +148,10 @@ class Constants {
   static const String pickTimeSlot = 'Pick available timeslot';
   static const String pickDate = 'Pick date';
   static const String selectTimeSlotMsg = 'Please select time slot first';
+
+  static bool isSnackbarVisible = false;
+  static bool snackbarType = false;
+  static String snackbarMsg = '';
 }
 
 

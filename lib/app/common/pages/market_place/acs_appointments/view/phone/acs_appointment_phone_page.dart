@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:acscallingchatflutter/app/common/navigation/pages.dart';
+import 'package:acscallingchatflutter/app/common/utils/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
@@ -93,6 +94,21 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
     super.initState();
 
     getAppointmentList();
+
+  }
+
+  void checkForSnackbar(){
+
+    if(Constants.isSnackbarVisible) {
+      CustomSnackBar().showToast(context, Constants.snackbarMsg, Constants.snackbarType);
+
+      Constants.isSnackbarVisible = false;
+      Constants.snackbarMsg = "";
+      Constants.snackbarType = false;
+      setState(() {
+
+      });
+    }
   }
 
   void getAppointmentList() async {
@@ -140,6 +156,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                                     .pushNamed(Pages.screen_booking)
                                     .then((value) => {
                                           getAppointmentList(),
+                                          checkForSnackbar(),
                                           setState(() {}),
                                         });
                               });
