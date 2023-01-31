@@ -9,8 +9,6 @@ import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:acscallingchatflutter/app/common/navigation/navigation.dart';
-import 'package:acscallingchatflutter/app/common/pages/market_place/home/view/home_page.dart';
-import 'package:acscallingchatflutter/app/common/pages/market_place/my_apps/view/my_apps_page.dart';
 import 'package:acscallingchatflutter/app/widgets/custom_text.dart';
 import 'package:acscallingchatflutter/data/helpers/shared_preferences.dart';
 import 'package:acscallingchatflutter/data/repositories/acs_chat_calling_repositories.dart';
