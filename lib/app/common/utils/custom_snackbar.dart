@@ -6,7 +6,7 @@ class CustomSnackBar {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 315),
-      duration: const Duration(seconds: 20),
+      duration: const Duration(seconds: 30),
       dismissDirection: DismissDirection.startToEnd,
       content: Container(
         // margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
