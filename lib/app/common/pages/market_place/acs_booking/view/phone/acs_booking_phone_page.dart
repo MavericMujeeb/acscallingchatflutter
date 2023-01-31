@@ -561,9 +561,8 @@ class ACSBookingPhonePageState
             padding: const EdgeInsets.symmetric(
                 horizontal: spacing_6, vertical: spacing_6),
             child: CustomText(
-              // textName: '01:45 PM - 02:45 PM',
-              textName: timeslots[index],
-              // textName: displayTimeSlot(index),
+              // textName: timeslots[index],
+              textName: displayTimeSlotNew(timeslots[index].toString()),
               textAlign: TextAlign.center,
               fontSize: 14,
               fontWeight: FontWeight.w300,
@@ -638,25 +637,21 @@ class ACSBookingPhonePageState
         ),
       );
 
-  displayTimeSlot(int index) {
-    var respStartTime = acsBookingController!.resp['value'][0]['workingHours']
-            [selectedDayIndex]['timeSlots'][index]['startTime']
-        .toString();
-    var respEndTime = acsBookingController!.resp['value'][0]['workingHours']
-            [selectedDayIndex]['timeSlots'][index]['endTime']
-        .toString();
+  displayTimeSlotNew(String time) {
+
+    var strInputTime = time.split('-');
+    var strStartTime = strInputTime[0].trim();
+    var strEndTime = strInputTime[1].trim();
 
     DateFormat formatter_display_time = DateFormat('hh:mm a');
 
-    DateTime tempStartTimeFormat =
-        new DateFormat("hh:mm:ss.sssZ").parse(respStartTime, true);
-    DateTime tempEndTimeFormat =
-        new DateFormat("hh:mm:ss.sssZ").parse(respEndTime, true);
+    DateTime tempStartTime = new DateFormat("HH:mm").parse(strStartTime, true);
+    DateTime tempEndTime = new DateFormat("HH:mm").parse(strEndTime, true);
 
-    var strStartTime = formatter_display_time.format(tempStartTimeFormat);
-    var strEndTime = formatter_display_time.format(tempEndTimeFormat);
+    var strConvertedStartTime = formatter_display_time.format(tempStartTime);
+    var strConvertedEndTime = formatter_display_time.format(tempEndTime);
 
-    return strStartTime + " - " + strEndTime;
+    return strConvertedStartTime.toString()+ " - "+strConvertedEndTime.toString();
   }
 
   void refreshTimeSlotsUI(int index) {
