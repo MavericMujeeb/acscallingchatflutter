@@ -53,14 +53,13 @@ class ACSAppointmentController extends BaseController {
 
     print("Response on getBankersList API is : "+respGetBanker.toString());
 
-    resp = await getAppointmentsAPI();
-    //var removedCancelledMeetingList = await getAppointmentsAPI();
+    var removedCancelledMeetingList = await getAppointmentsAPI();
 
-   // resp = removedCancelledMeetingList['value'].where((item) => item['isCancelled'] == false ).toList();
+   resp = removedCancelledMeetingList['value'].where((item) => item['isCancelled'] == false ).toList();
 
     print("Respose on getAppointments is : "+resp.toString());
 
-    //print("Respose on getAppointments is filter : "+removedCancelledMeetingList.toString());
+    print("Respose on getAppointments is filter : "+resp.length.toString());
 
     inProgress = false;
 
