@@ -6,7 +6,7 @@ class CustomSnackBar {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 315),
-      duration: const Duration(seconds: 30),
+      duration: const Duration(seconds: 20),
       dismissDirection: DismissDirection.startToEnd,
       content: Container(
         // margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -20,18 +20,21 @@ class CustomSnackBar {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: Text(
-                strMsg.toString(),
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
+              child: Container(
+                width: MediaQuery.of(context).size.width - 120,
+                child: Text(
+                  strMsg.toString(),
+                  style: TextStyle(fontSize: 13),
+                  softWrap: true,
+                  maxLines: 5,
+                  overflow: TextOverflow.fade,
                 ),
               ),
             ),
             GestureDetector(
               onTap: () {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                // ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
