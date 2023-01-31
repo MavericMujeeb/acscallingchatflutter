@@ -6,23 +6,6 @@ class Resources {
   static const String user_1 = 'assets/images/user_1.png';
   static const String user_2 = 'assets/images/user_2.png';
   static const String user_3 = 'assets/images/user_3.png';
-  static const String addepar_img = 'assets/images/addepar.jpeg';
-  static const String advisor_metrix_img = 'assets/images/advisor_metrix.png';
-  static const String money_quotient_img = 'assets/images/money_quotient.png';
-  static const String usa_icon__img = 'assets/images/usa_logo.png';
-  static const String addaper_icon_img = 'assets/images/addaper_logo.png';
-  static const String koyfin_icon_img = 'assets/images/koyfin.png';
-  static const String riskalyze_img = 'assets/images/riskalyze.png';
-  static const String blackrock_img = 'assets/images/blackrock.png';
-  static const String covisum_img = 'assets/images/covisum.png';
-  static const String settings_img = 'assets/images/settings.png';
-  static const String progress_icon_img = 'assets/icons/progress_icon.png';
-  static const String progress_data_lock_img = 'assets/images/progress_data_lock.png';
-
-  static const String tab_home_icon = 'assets/icons/home.png';
-  static const String tab_browse_icon = 'assets/icons/browse.png';
-  static const String tab_myapps_icon = 'assets/icons/myapps.png';
-  static const String tab_profile_icon = 'assets/icons/profile.png';
 
   // static const int number = 0;
   static int number = 0;
