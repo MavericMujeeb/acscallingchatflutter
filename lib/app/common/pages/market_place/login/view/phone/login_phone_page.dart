@@ -137,7 +137,8 @@ class LoginPhoneView extends ViewState<LoginPhonePage, LoginController> {
   Widget get loginButton => CustomButton(
     onTapAction: () => {
       Future.delayed(const Duration(microseconds: 500),() {
-        navigateToDashboardScreen(context, 0);
+        // navigateToDashboardScreen(context, 0);
+        navigateToContactCernterScreen(context);
       }),
     },
     buttonName: const Text(Constants.login),
