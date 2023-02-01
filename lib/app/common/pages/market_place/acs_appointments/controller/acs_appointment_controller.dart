@@ -53,12 +53,14 @@ class ACSAppointmentController extends BaseController {
 
     print("Response on getBankersList API is : "+respGetBanker.toString());
 
-    resp = await getAppointmentsAPI();
+    var removedCancelledMeetingList = await getAppointmentsAPI();
+
+    //Removing cancelled meeting from appointment list
+    resp = removedCancelledMeetingList['value'].where((item) => item['isCancelled'] == false ).toList();
+
     //var removedCancelledMeetingList = await getAppointmentsAPI();
 
    // resp = removedCancelledMeetingList['value'].where((item) => item['isCancelled'] == false ).toList();
-
-    print("Respose on getAppointments is : "+resp.toString());
 
     //print("Respose on getAppointments is filter : "+removedCancelledMeetingList.toString());
 
@@ -95,7 +97,7 @@ class ACSAppointmentController extends BaseController {
     // print(finalstartDate);
     // print(finalendDate);
     var url = Uri.parse(
-        'https://graph.microsoft.com/v1.0/users/chantalkendall@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=$finalstartDate&endDateTime=$finalendDate');
+        'https://graph.microsoft.com/v1.0/users/chantalkendall@27r4l5.onmicrosoft.com/calendar/calendarView?\$top=100&startDateTime=$finalstartDate&endDateTime=$finalendDate');
     // 'https://graph.microsoft.com/v1.0/users/GatesFamilyOffice@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-17T00:00:00-08:00&endDateTime=2023-01-19T19:00:00-08:00');
     // 'https://graph.microsoft.com/v1.0/users/kishan@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-22T13:45:00-08:00&endDateTime=2023-02-24T00:00:00-08:00');
     print("URL->"+url.toString());

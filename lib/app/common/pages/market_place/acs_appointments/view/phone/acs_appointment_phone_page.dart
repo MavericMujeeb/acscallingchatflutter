@@ -232,8 +232,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
             ),
             vSpacer(18),
             acsAppointmentController!.resp != null &&
-                    acsAppointmentController!.resp['value'] != null &&
-                    acsAppointmentController!.resp['value'].length > 0
+                acsAppointmentController!.resp.length > 0
                 ? listAppointments
                 : Center(
                     child: CustomText(
@@ -279,7 +278,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
   Widget get listAppointments => ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: acsAppointmentController!.resp['value'].length,
+      itemCount: acsAppointmentController!.resp.length,
       itemBuilder: (BuildContext context, int index) {
         return appointmentCellItem(index);
       });
@@ -366,15 +365,9 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                 GestureDetector(
                     onTap: () {
                       joinCallClick(
-                          acsAppointmentController!.resp['value'][index]
-                              ['onlineMeeting']['joinUrl'],
-                          acsAppointmentController!
-                                      .resp['value'][index]['attendees']
-                                      .length >
-                                  0
-                              ? acsAppointmentController!.resp['value'][index]
-                                      ['attendees'][0]['emailAddress']['name']
-                                  .toString()
+                          acsAppointmentController!.resp[index]['onlineMeeting']['joinUrl'],
+                          acsAppointmentController!.resp[index]['attendees'].length > 0
+                              ? acsAppointmentController!.resp[index]['attendees'][0]['emailAddress']['name'].toString()
                               : "No Name");
                     },
                     child: customButton(40, Constants.joinMeeting, Colors.white,
@@ -398,17 +391,17 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
     DateFormat formatter_display_time = DateFormat('hh:mm a');
 
     DateTime tempDateTime = new DateFormat("yyyy-MM-dd'T'hh:mm:ss.sssZ").parse(
-        acsAppointmentController!.resp['value'][index]['start']['dateTime']
+        acsAppointmentController!.resp[index]['start']['dateTime']
             .toString(),
         true);
     var strDate = formatter_display_date.format(tempDateTime);
     var strTime = formatter_display_time.format(tempDateTime.toLocal());
-    var strTimeZone = acsAppointmentController!.resp['value'][index]['start']
+    var strTimeZone = acsAppointmentController!.resp[index]['start']
             ['timeZone']
         .toString();
     var strBankerName =
-        acsAppointmentController!.resp['value'][index]['attendees'].length > 0
-            ? acsAppointmentController!.resp['value'][index]['attendees'][0]
+        acsAppointmentController!.resp[index]['attendees'].length > 0
+            ? acsAppointmentController!.resp[index]['attendees'][0]
                     ['emailAddress']['name']
                 .toString()
             : "No Name";
