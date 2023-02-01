@@ -88,15 +88,25 @@ class ACSBookingController extends BaseController {
     acsToken = await AppSharedPreference()
         .getString(key: SharedPrefKey.prefs_acs_token);
 
+    var startScheduleTimeFormat = DateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(date + "T08:00:00", true);
+    var endScheduleTimeFormat = DateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(date + "T17:00:00", true);
+    var utcStartTime = DateTime(startScheduleTimeFormat.year, startScheduleTimeFormat.month, startScheduleTimeFormat.day, startScheduleTimeFormat.hour, startScheduleTimeFormat.minute, startScheduleTimeFormat.second);
+    var utcEndTime = DateTime(endScheduleTimeFormat.year, endScheduleTimeFormat.month, endScheduleTimeFormat.day, endScheduleTimeFormat.hour, endScheduleTimeFormat.minute, endScheduleTimeFormat.second);
+
+    // print("startScheduleTime-> "+startScheduleTimeFormat.toUtc().toString());
+    // print("startScheduleTime-> "+endScheduleTimeFormat.toUtc().toString());
+    // print("startScheduleTime-> "+utcStartTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', ""));
+    // print("startScheduleTime-> "+utcEndTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', ""));
+    // print("startScheduleTime-> "+utcStartTime.timeZoneName);
     final body = {
       "schedules": ["$selectedBankerEmailId"],
       "startTime": {
-        "dateTime": date + "T08:00:00",
-        "timeZone": "Pacific Standard Time"
+        "dateTime": utcStartTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', ""),
+        "timeZone": "UTC"
       },
       "endTime": {
-        "dateTime": date + "T17:00:00",
-        "timeZone": "Pacific Standard Time"
+        "dateTime": utcEndTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', ""),
+        "timeZone": "UTC"
       },
       "availabilityViewInterval": 30
     };
@@ -158,16 +168,11 @@ class ACSBookingController extends BaseController {
 
     final response = await http.post(
       url,
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
       body: {
-        "client_id": "e6197263-b986-4f08-9a27-08a4ec1b5c8e",
-        "scope": "https://graph.microsoft.com/.default",
-        "code": strCode,
-        "redirect_uri": "https://oauth.pstmn.io/v1/browser-callback",
-        "grant_type": "authorization_code",
-        "client_secret": "4k48Q~wbivlxdFIbyVcNg3ykunlNdI.vcyC2Kbi0",
+        'client_id': 'e6197263-b986-4f08-9a27-08a4ec1b5c8e',
+        'scope': 'https://graph.microsoft.com/.default',
+        'client_secret':'4k48Q~wbivlxdFIbyVcNg3ykunlNdI.vcyC2Kbi0',
+        'grant_type':'client_credentials'
       },
     );
 
@@ -193,29 +198,40 @@ class ACSBookingController extends BaseController {
   }
 
   Future bookAppointAPI(String acsTokenNew) async {
+
+    var startTimeFormat = DateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(defaultDate+"T"+pickedStartTime+":00", true);
+    var endTimeFormat = DateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(defaultDate+"T"+pickedEndTime+":00", true);
+    var utcStartTime = DateTime(startTimeFormat.year, startTimeFormat.month, startTimeFormat.day, startTimeFormat.hour, startTimeFormat.minute, startTimeFormat.second);
+    var utcEndTime = DateTime(endTimeFormat.year, endTimeFormat.month, endTimeFormat.day, endTimeFormat.hour, endTimeFormat.minute, endTimeFormat.second);
+
     final body = {
       "@odata.type": "#microsoft.graph.bookingAppointment",
       "customerTimeZone": "America/Chicago",
       "smsNotificationsEnabled": false,
+      "startDateTime": {
+        "@odata.type": "#microsoft.graph.dateTimeTimeZone",
+        "dateTime": utcStartTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', "")+".0000000+00:00",
+        "timeZone": "UTC"
+      },
       "endDateTime": {
         "@odata.type": "#microsoft.graph.dateTimeTimeZone",
-        "dateTime": defaultDate+"T"+pickedEndTime+":00.0000000+00:00",
-        "timeZone": "CST"
+        "dateTime": utcEndTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', "")+".0000000+00:00",
+        "timeZone": "UTC"
       },
       "isLocationOnline": true,
       "optOutOfCustomerEmail": false,
       "anonymousJoinWebUrl": null,
       "staffMemberIds":["$selectedBankerId"],
-      "postBuffer": "PT10M",
-      "preBuffer": "PT5M",
-      "price": 10.0,
+      "postBuffer": "PT0S",
+      "preBuffer": "PT0S",
+      "price": 0,
       "priceType@odata.type": "#microsoft.graph.bookingPriceType",
-      "priceType": "fixedPrice",
+      "priceType": "undefined",
       "reminders@odata.type": "#Collection(microsoft.graph.bookingReminder)",
       "reminders": [
         {
           "@odata.type": "#microsoft.graph.bookingReminder",
-          "message": "This service is tomorrow",
+          "message": "This service is Today",
           "offset": "P1D",
           "recipients@odata.type": "#microsoft.graph.bookingReminderRecipients",
           "recipients": "allAttendees"
@@ -240,17 +256,17 @@ class ACSBookingController extends BaseController {
         "@odata.type": "#microsoft.graph.location",
         "address": {
           "@odata.type": "#microsoft.graph.physicalAddress",
-          "city": "Irving",
-          "countryOrRegion": "USA",
-          "postalCode": "75035",
+          "city": "",
+          "countryOrRegion": "",
+          "postalCode": "",
           "postOfficeBox": null,
-          "state": "TX",
-          "street": "6400 Las Colinas Blvd",
+          "state": "",
+          "street": "",
           "type@odata.type": "#microsoft.graph.physicalAddressType",
           "type": null
         },
         "coordinates": null,
-        "displayName": "Citi office",
+        "displayName": "",
         "locationEmailAddress": null,
         "locationType@odata.type": "#microsoft.graph.locationType",
         "locationType": null,
@@ -261,11 +277,6 @@ class ACSBookingController extends BaseController {
       },
       "serviceName": "30-min meeting",
       "serviceNotes": "Customer requires punctual service.",
-      "startDateTime": {
-        "@odata.type": "#microsoft.graph.dateTimeTimeZone",
-        "dateTime": defaultDate+"T"+pickedStartTime+":00.0000000+00:00",
-        "timeZone": "CST"
-      },
       "maximumAttendeesCount": 1,
       "filledAttendeesCount": 1,
       "customers@odata.type": "#Collection(microsoft.graph.bookingCustomerInformation)",
