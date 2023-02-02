@@ -69,8 +69,8 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
   Future<void> methodHandler(MethodCall call) async {
     String callArguments = call.arguments;
     Map<String, dynamic> userMap = json.decode(callArguments);
-    switch(call.method) {
-      case "loginUserDetails" :
+    switch (call.method) {
+      case "loginUserDetails":
         var userInfoData = UserInfoData.fromJson(userMap);
         Constants.userName = userInfoData.userName;
         Constants.userEmail = userInfoData.userEmail;
@@ -111,25 +111,41 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
     // TODO: implement initState
     super.initState();
     incomingMethodHandler();
+    print("Init State is called");
     getAppointmentList();
-
   }
 
-  void checkForSnackbar(){
-
-    if(Constants.isSnackbarVisible) {
-      CustomSnackBar().showToast(context, Constants.snackbarMsg, Constants.snackbarType);
+  void checkForSnackbar() {
+    if (Constants.isSnackbarVisible) {
+      CustomSnackBar()
+          .showToast(context, Constants.snackbarMsg, Constants.snackbarType);
 
       Constants.isSnackbarVisible = false;
       Constants.snackbarMsg = "";
       Constants.snackbarType = false;
-      setState(() {
-
+      setState(() {});
+      acsAppointmentController!.resp = "";
+      acsAppointmentController!.inProgress = true;
+      setState(() {});
+      Future.delayed(Duration(seconds: 2), () {
+        getAppointmentList();
+        setState(() {});
       });
+      setState(() {});
     }
   }
 
+  /*void delay10Sec() async {
+    Future.delayed(
+        Duration(
+            seconds: 10), () {
+      print("delay10Sec is called");
+      // getAppointmentList();
+    });
+  }*/
+
   void getAppointmentList() async {
+    print("Get getAppointmentList is called");
     await acsAppointmentController!.getToken();
     setState(() {});
   }
@@ -173,9 +189,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                                 Navigator.of(context)
                                     .pushNamed(Pages.screen_booking)
                                     .then((value) => {
-                                          getAppointmentList(),
                                           checkForSnackbar(),
-                                          setState(() {}),
                                         });
                               });
                             }
@@ -250,7 +264,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
             ),
             vSpacer(18),
             acsAppointmentController!.resp != null &&
-                acsAppointmentController!.resp.length > 0
+                    acsAppointmentController!.resp.length > 0
                 ? listAppointments
                 : Center(
                     child: CustomText(
@@ -383,9 +397,14 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                 GestureDetector(
                     onTap: () {
                       joinCallClick(
-                          acsAppointmentController!.resp[index]['onlineMeeting']['joinUrl'],
-                          acsAppointmentController!.resp[index]['attendees'].length > 0
-                              ? acsAppointmentController!.resp[index]['attendees'][0]['emailAddress']['name'].toString()
+                          acsAppointmentController!.resp[index]['onlineMeeting']
+                              ['joinUrl'],
+                          acsAppointmentController!
+                                      .resp[index]['attendees'].length >
+                                  0
+                              ? acsAppointmentController!.resp[index]
+                                      ['attendees'][0]['emailAddress']['name']
+                                  .toString()
                               : "No Name");
                     },
                     child: customButton(40, Constants.joinMeeting, Colors.white,
@@ -409,14 +428,12 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
     DateFormat formatter_display_time = DateFormat('hh:mm a');
 
     DateTime tempDateTime = new DateFormat("yyyy-MM-dd'T'hh:mm:ss.sssZ").parse(
-        acsAppointmentController!.resp[index]['start']['dateTime']
-            .toString(),
+        acsAppointmentController!.resp[index]['start']['dateTime'].toString(),
         true);
     var strDate = formatter_display_date.format(tempDateTime);
     var strTime = formatter_display_time.format(tempDateTime.toLocal());
-    var strTimeZone = acsAppointmentController!.resp[index]['start']
-            ['timeZone']
-        .toString();
+    var strTimeZone =
+        acsAppointmentController!.resp[index]['start']['timeZone'].toString();
     var strBankerName =
         acsAppointmentController!.resp[index]['attendees'].length > 0
             ? acsAppointmentController!.resp[index]['attendees'][0]
