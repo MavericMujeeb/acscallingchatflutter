@@ -199,8 +199,8 @@ class ACSBookingController extends BaseController {
 
   Future bookAppointAPI(String acsTokenNew) async {
 
-    var startTimeFormat = DateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(defaultDate+"T"+pickedStartTime+":00", true);
-    var endTimeFormat = DateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(defaultDate+"T"+pickedEndTime+":00", true);
+    var startTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(defaultDate+"T"+pickedStartTime+":00", true);
+    var endTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(defaultDate+"T"+pickedEndTime+":00", true);
     var utcStartTime = DateTime(startTimeFormat.year, startTimeFormat.month, startTimeFormat.day, startTimeFormat.hour, startTimeFormat.minute, startTimeFormat.second);
     var utcEndTime = DateTime(endTimeFormat.year, endTimeFormat.month, endTimeFormat.day, endTimeFormat.hour, endTimeFormat.minute, endTimeFormat.second);
 
