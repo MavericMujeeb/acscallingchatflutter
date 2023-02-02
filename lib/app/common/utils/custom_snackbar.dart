@@ -5,7 +5,7 @@ class CustomSnackBar {
   void showToast(BuildContext context, String strMsg, bool status) async {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 315),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height - 350),
       duration: const Duration(seconds: 30),
       dismissDirection: DismissDirection.startToEnd,
       content: Container(
