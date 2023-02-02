@@ -149,21 +149,30 @@ class ACSBookingPhonePageState
             getScheduleResponse['value'][0]['availabilityView'] != null
         ? getScheduleResponse['value'][0]['availabilityView'].split('')
         : "000000000000000000".split('');
-    var startWorkingHr = getScheduleResponse['value'] != null &&
-            getScheduleResponse['value'].length > 0 &&
-            getScheduleResponse['value'][0]['workingHours'] != null &&
-            getScheduleResponse['value'][0]['workingHours']['startTime'] != null
-        ? getScheduleResponse['value'][0]['workingHours']['startTime']
-        : "08:00:00.0000000";
-    var endWorkingHr = getScheduleResponse['value'] != null &&
-            getScheduleResponse['value'].length > 0 &&
-            getScheduleResponse['value'][0]['workingHours'] != null &&
-            getScheduleResponse['value'][0]['workingHours']['endTime'] != null
-        ? getScheduleResponse['value'][0]['workingHours']['endTime']
-        : "17:00:00.0000000";
+    var startWorkingHr = acsBookingController!.respGetBanker['value'] != null &&
+        acsBookingController!.respGetBanker['value'].length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'] != null &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'].length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] != null &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] .length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['startTime'] != null
+        ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['startTime']
+        : "14:00:00.0000000";
+    var endWorkingHr = acsBookingController!.respGetBanker['value'] != null &&
+        acsBookingController!.respGetBanker['value'].length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'] != null &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'].length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] != null &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] .length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['endTime'] != null
+        ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['endTime']
+        : "23:00:00.0000000";
+
+    var startTimeFormat = DateFormat("HH:mm:ss").parse(startWorkingHr, true);
+    var endTimeFormat = DateFormat("HH:mm:ss").parse(endWorkingHr, true);
 
     timeslots = acsBookingController!
-        .getTimeSlotsToDisplay(startWorkingHr, endWorkingHr);
+        .getTimeSlotsToDisplay(startTimeFormat.toLocal().toString().replaceAll("1970-01-01 ", ""), endTimeFormat.toLocal().toString().replaceAll("1970-01-01 ", ""));
 
     // var parts = timeslots[0].split('-');
     // acsBookingController!.pickedStartTime = parts[0].trim();
