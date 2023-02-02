@@ -111,7 +111,6 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
     // TODO: implement initState
     super.initState();
     incomingMethodHandler();
-    print("Init State is called");
     getAppointmentList();
   }
 
