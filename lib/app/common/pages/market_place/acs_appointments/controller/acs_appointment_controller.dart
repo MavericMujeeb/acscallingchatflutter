@@ -56,7 +56,8 @@ class ACSAppointmentController extends BaseController {
     var removedCancelledMeetingList = await getAppointmentsAPI();
 
     //Removing cancelled meeting from appointment list
-    resp = removedCancelledMeetingList['value'].where((item) => item['isCancelled'] == false ).toList();
+    resp = removedCancelledMeetingList['value'].where((item) => item['isCancelled'] == false &&
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss.0000000").parse(item['end']['dateTime'], true).toLocal().millisecondsSinceEpoch > DateTime.now().millisecondsSinceEpoch).toList();
 
     //var removedCancelledMeetingList = await getAppointmentsAPI();
 
@@ -89,7 +90,7 @@ class ACSAppointmentController extends BaseController {
     String currentDate = format.format(nowDate);
     String oneMonthDate = format.format(thirtydaysDate);
     String currentTime = timeformat.format(nowDate);
-    String finalstartDate = "${currentDate}T$currentTime:00-08:00";
+    String finalstartDate = "${currentDate}T00:00:00-08:00";
     String finalendDate = "${oneMonthDate}T23:58:00-08:00";
     // print(currentDate);
     // print(oneMonthDate);

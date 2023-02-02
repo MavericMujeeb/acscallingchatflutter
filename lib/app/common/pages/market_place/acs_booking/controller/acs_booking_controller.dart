@@ -88,8 +88,8 @@ class ACSBookingController extends BaseController {
     acsToken = await AppSharedPreference()
         .getString(key: SharedPrefKey.prefs_acs_token);
 
-    var startScheduleTimeFormat = DateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(date + "T08:00:00", true);
-    var endScheduleTimeFormat = DateFormat("yyyy-MM-dd'T'hh:mm:ss").parse(date + "T17:00:00", true);
+    var startScheduleTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date + "T08:00:00", true);
+    var endScheduleTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date + "T17:00:00", true);
     var utcStartTime = DateTime(startScheduleTimeFormat.year, startScheduleTimeFormat.month, startScheduleTimeFormat.day, startScheduleTimeFormat.hour, startScheduleTimeFormat.minute, startScheduleTimeFormat.second);
     var utcEndTime = DateTime(endScheduleTimeFormat.year, endScheduleTimeFormat.month, endScheduleTimeFormat.day, endScheduleTimeFormat.hour, endScheduleTimeFormat.minute, endScheduleTimeFormat.second);
 
