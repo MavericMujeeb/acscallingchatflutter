@@ -72,6 +72,11 @@ class Constants {
   //API settings config
   static const String service_email_id = 'JohnsonFamilyBusiness1@27r4l5.onmicrosoft.com';
 
+  //User Info data
+  static String userName = 'Janet Johnson';
+  static String userEmail = 'janetjohnsonfamily83@gmail.com';
+  static String userId = 'a2194b29-07bb-48bb-8607-6151334cf904';
+
   static const String loggedInUser_key = "loggedInUser";
   static const String app_serach = 'search';
   static const String app_search_hint = "Search";

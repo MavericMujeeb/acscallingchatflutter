@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:acscallingchatflutter/app/common/navigation/pages.dart';
 import 'package:acscallingchatflutter/app/common/utils/custom_snackbar.dart';
+import 'package:acscallingchatflutter/domain/entities/user_info_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
@@ -61,6 +62,23 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
         <String, String>{'meeting_id': meetingLink, 'user_name': username});
   }
 
+  Future incomingMethodHandler() async {
+    Channel.setMethodCallHandler(methodHandler);
+  }
+
+  Future<void> methodHandler(MethodCall call) async {
+    String callArguments = call.arguments;
+    Map<String, dynamic> userMap = json.decode(callArguments);
+    switch(call.method) {
+      case "loginUserDetails" :
+        var userInfoData = UserInfoData.fromJson(userMap);
+        Constants.userName = userInfoData.userName;
+        Constants.userEmail = userInfoData.userEmail;
+        Constants.userId = userInfoData.userId;
+        break;
+    }
+  }
+
   /*Future<void> startCallClick() async {
     final int batteryLevel =
         await Channel.invokeMethod('startCallClick', <String, String>{
@@ -92,7 +110,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    incomingMethodHandler();
     getAppointmentList();
 
   }
@@ -350,7 +368,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
               children: [
                 vSpacer(spacing_12),
                 CustomText(
-                    textName: 'Hello Janet Johnson!',
+                    textName: 'Hello ${Constants.userName}!',
                     textAlign: TextAlign.start,
                     fontSize: 17,
                     fontWeight: FontWeight.w400),

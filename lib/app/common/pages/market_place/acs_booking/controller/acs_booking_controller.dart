@@ -283,9 +283,9 @@ class ACSBookingController extends BaseController {
       "customers": [
         {
           "@odata.type": "#microsoft.graph.bookingCustomerInformation",
-          "customerId": "a2194b29-07bb-48bb-8607-6151334cf904",
-          "name": "Janet Johnson",
-          "emailAddress": "janetjohnsonfamily83@gmail.com",
+          "customerId": Constants.userId,
+          "name": Constants.userName,
+          "emailAddress": Constants.userEmail,
           "phone": "862-228-7032",
           "notes": null,
           "location": {
