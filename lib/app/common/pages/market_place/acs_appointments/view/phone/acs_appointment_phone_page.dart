@@ -240,41 +240,56 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
         ],
       );
 
-  Widget get listColumnStaffAppointment => SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            vSpacer(6),
-            CustomText(
-                textName: Constants.yourPrivateBankers,
-                textAlign: TextAlign.left,
-                fontSize: 16,
-                fontWeight: FontWeight.w500),
-            vSpacer(12),
-            SizedBox(
-              height: 120,
-              child: acsAppointmentController!.respGetBanker != null &&
-                      acsAppointmentController!.respGetBanker['value'].length >
-                          0
-                  ? listBankers()
-                  : const Center(
-                      child: CircularProgressIndicator(),
+  Widget get listColumnStaffAppointment => RefreshIndicator(
+    strokeWidth: 3,
+    triggerMode: RefreshIndicatorTriggerMode.onEdge,
+    onRefresh: () async {
+      print("On Refresh is called");
+      acsAppointmentController!.resp = "";
+      acsAppointmentController!.inProgress = true;
+      setState(() {});
+      Future.delayed(Duration(seconds: 1), () {
+        getAppointmentList();
+        setState(() {});
+      });
+      setState(() {});
+    },
+    child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              vSpacer(6),
+              CustomText(
+                  textName: Constants.yourPrivateBankers,
+                  textAlign: TextAlign.left,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500),
+              vSpacer(12),
+              SizedBox(
+                height: 120,
+                child: acsAppointmentController!.respGetBanker != null &&
+                        acsAppointmentController!.respGetBanker['value'].length >
+                            0
+                    ? listBankers()
+                    : const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+              ),
+              vSpacer(18),
+              acsAppointmentController!.resp != null &&
+                      acsAppointmentController!.resp.length > 0
+                  ? listAppointments
+                  : Center(
+                      child: CustomText(
+                          textName: Constants.noAppointments,
+                          textAlign: TextAlign.center,
+                          fontSize: 14,
+                          fontWeight: FontWeight.normal),
                     ),
-            ),
-            vSpacer(18),
-            acsAppointmentController!.resp != null &&
-                    acsAppointmentController!.resp.length > 0
-                ? listAppointments
-                : Center(
-                    child: CustomText(
-                        textName: Constants.noAppointments,
-                        textAlign: TextAlign.center,
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal),
-                  ),
-          ],
+            ],
+          ),
         ),
-      );
+  );
 
   Widget get appointmentContent => Expanded(
         child: Stack(
