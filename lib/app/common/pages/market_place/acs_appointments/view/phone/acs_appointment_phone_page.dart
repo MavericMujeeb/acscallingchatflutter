@@ -244,7 +244,6 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
     strokeWidth: 3,
     triggerMode: RefreshIndicatorTriggerMode.onEdge,
     onRefresh: () async {
-      print("On Refresh is called");
       acsAppointmentController!.resp = "";
       acsAppointmentController!.inProgress = true;
       setState(() {});
