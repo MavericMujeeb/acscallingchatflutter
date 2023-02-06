@@ -36,6 +36,7 @@ dependencies:
   intl: ^0.18.0
   oauth2: ^2.0.1
   webview_flutter: ^4.0.2
+  another_flushbar: ^1.12.29
 #  webview_flutter_wkwebview: ^3.0.2
 
 dev_dependencies:
