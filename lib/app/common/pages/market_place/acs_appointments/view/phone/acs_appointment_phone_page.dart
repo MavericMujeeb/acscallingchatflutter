@@ -206,31 +206,15 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                           left: 14,
                           right: 14,
                           bottom: 80,
-                          child: acsAppointmentController!.inProgress
-                              ? Container(
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  // color: Colors.black12,
-                                  // color: AppColor.black_trans,
-                                  child: const Center(
+                          child: SizedBox(
+                            height: double.infinity,
+                            width: double.infinity,
+                            child: acsAppointmentController!.inProgress
+                                ? const Center(
                                     child: CircularProgressIndicator(),
-                                  ),
-                                )
-                              : listColumnStaffAppointment
-                          /*: acsAppointmentController!.resp != null &&
-                                    acsAppointmentController!.resp['value'] !=
-                                        null &&
-                                    acsAppointmentController!
-                                            .resp['value'].length > 0
-                                ? listAppointments
-                                : Center(
-                                    child: CustomText(
-                                        textName: Constants.noAppointments,
-                                        textAlign: TextAlign.center,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal),
-                                  ),*/
-                          ),
+                                  )
+                                : listColumnStaffAppointment,
+                          )),
                     ],
                   ),
                 ],
@@ -241,19 +225,20 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
       );
 
   Widget get listColumnStaffAppointment => RefreshIndicator(
-    strokeWidth: 3,
-    triggerMode: RefreshIndicatorTriggerMode.onEdge,
-    onRefresh: () async {
-      acsAppointmentController!.resp = "";
-      acsAppointmentController!.inProgress = true;
-      setState(() {});
-      Future.delayed(Duration(seconds: 1), () {
-        getAppointmentList();
-        setState(() {});
-      });
-      setState(() {});
-    },
-    child: SingleChildScrollView(
+        strokeWidth: 3,
+        triggerMode: RefreshIndicatorTriggerMode.onEdge,
+        onRefresh: () async {
+          acsAppointmentController!.resp = "";
+          acsAppointmentController!.inProgress = true;
+          setState(() {});
+          Future.delayed(Duration(seconds: 1), () {
+            getAppointmentList();
+            setState(() {});
+          });
+          setState(() {});
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -267,9 +252,10 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
               SizedBox(
                 height: 120,
                 child: acsAppointmentController!.respGetBanker != null &&
-                        acsAppointmentController!.respGetBanker['value'].length >
+                        acsAppointmentController!
+                                .respGetBanker['value'].length >
                             0
-                    ? listBankers()
+                    ? listBankers
                     : const Center(
                         child: CircularProgressIndicator(),
                       ),
@@ -285,10 +271,11 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                           fontSize: 14,
                           fontWeight: FontWeight.normal),
                     ),
+              vSpacer(200),
             ],
           ),
         ),
-  );
+      );
 
   Widget get appointmentContent => Expanded(
         child: Stack(
@@ -310,7 +297,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
         color: AppColor.black_color_54,
       );
 
-  Widget listBankers() => ListView.builder(
+  Widget get listBankers => ListView.builder(
       // physics: const NeverScrollableScrollPhysics(),
       scrollDirection: Axis.horizontal,
       // shrinkWrap: true,
@@ -323,12 +310,13 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
   Widget get listAppointments => ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
+      // itemCount: acsAppointmentController!.resp.length,
       itemCount: acsAppointmentController!.resp.length,
       itemBuilder: (BuildContext context, int index) {
         return appointmentCellItem(index);
       });
 
-  Widget bankerListCell(int index) => Container(
+  Widget bankerListCell(int index) => SizedBox(
         width: MediaQuery.of(context).size.width - 30,
         child: Card(
           color: Colors.white,
