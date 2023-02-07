@@ -56,9 +56,18 @@ class ACSAppointmentController extends BaseController {
     var removedCancelledMeetingList = await getAppointmentsAPI();
 
     //Removing cancelled meeting from appointment list
-    resp = removedCancelledMeetingList['value'].where((item) => item['isCancelled'] == false &&
-        DateFormat("yyyy-MM-dd'T'HH:mm:ss.0000000").parse(item['end']['dateTime'], true).toLocal().millisecondsSinceEpoch > DateTime.now().millisecondsSinceEpoch).toList();
-
+    if (removedCancelledMeetingList['value'] != null &&
+        removedCancelledMeetingList['value'].length > 0) {
+      resp = removedCancelledMeetingList['value']
+          .where((item) =>
+              item['isCancelled'] == false &&
+              DateFormat("yyyy-MM-dd'T'HH:mm:ss.0000000")
+                      .parse(item['end']['dateTime'], true)
+                      .toLocal()
+                      .millisecondsSinceEpoch >
+                  DateTime.now().millisecondsSinceEpoch)
+          .toList();
+    }
     //var removedCancelledMeetingList = await getAppointmentsAPI();
 
    // resp = removedCancelledMeetingList['value'].where((item) => item['isCancelled'] == false ).toList();

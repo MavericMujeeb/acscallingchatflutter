@@ -72,7 +72,8 @@ class Constants {
   //API settings config
   static const String service_email_id = 'JohnsonFamilyBusiness1@27r4l5.onmicrosoft.com';
 
-  //User Info data
+  //User Info data set for hardcoded, it should not break code in flutter
+  //when user logged-in from iOS it'll be dynamic content
   static String userName = 'Janet Johnson';
   static String userEmail = 'janetjohnsonfamily83@gmail.com';
   static String userId = 'a2194b29-07bb-48bb-8607-6151334cf904';
