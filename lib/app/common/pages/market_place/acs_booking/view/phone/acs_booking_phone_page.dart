@@ -172,7 +172,7 @@ class ACSBookingPhonePageState
     var endTimeFormat = DateFormat("HH:mm:ss").parse(endWorkingHr, true);
 
     timeslots = acsBookingController!
-        .getTimeSlotsToDisplay(startTimeFormat.toLocal().toString().replaceAll("1970-01-01 ", ""), endTimeFormat.toLocal().toString().replaceAll("1970-01-01 ", ""));
+        .getTimeSlotsToDisplay(DateFormat.Hm().format(startTimeFormat.toLocal()), DateFormat.Hm().format(endTimeFormat.toLocal()));
 
     // var parts = timeslots[0].split('-');
     // acsBookingController!.pickedStartTime = parts[0].trim();
@@ -194,7 +194,7 @@ class ACSBookingPhonePageState
       Constants.isSnackbarVisible = true;
       Constants.snackbarMsg = "Booking is completed on " +
           acsBookingController!.defaultDate +
-          " at\n " +
+          " at " +
           acsBookingController!.pickedStartTime +
           " with " +
           acsBookingController!.selectedBankerName;
