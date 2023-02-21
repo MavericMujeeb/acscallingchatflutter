@@ -62,6 +62,12 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
         <String, String>{'meeting_id': meetingLink, 'user_name': username});
   }
 
+  Future<void> chatWithBanker(username) async {
+    print(username);
+    await Channel.invokeMethod('startChat',
+        <String, String>{'user_name': username});
+  }
+
   Future incomingMethodHandler() async {
     Channel.setMethodCallHandler(methodHandler);
   }
@@ -318,47 +324,51 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
 
   Widget bankerListCell(int index) => SizedBox(
         width: MediaQuery.of(context).size.width - 30,
-        child: Card(
-          color: Colors.white,
-          elevation: 2.0,
-          shadowColor: Colors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(spacing_14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(40.0),
-                  child: Image.asset(
-                    index == 0
-                        ? Resources.user_3
-                        : index == 1
-                            ? Resources.user_1
-                            : Resources.user_2,
-                    height: 40.0,
-                    width: 40.0,
-                    fit: BoxFit.fill,
+        child: GestureDetector(
+          onTap: ()=> chatWithBanker(acsAppointmentController!.respGetBanker['value']
+          [index]['emailAddress']),
+          child: Card(
+            color: Colors.white,
+            elevation: 2.0,
+            shadowColor: Colors.black,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(spacing_14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(40.0),
+                    child: Image.asset(
+                      index == 0
+                          ? Resources.user_3
+                          : index == 1
+                          ? Resources.user_1
+                          : Resources.user_2,
+                      height: 40.0,
+                      width: 40.0,
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                ),
-                vSpacer(spacing_8),
-                CustomText(
-                    textName: acsAppointmentController!.respGetBanker['value']
-                            [index]['displayName']
-                        .toString(),
-                    textAlign: TextAlign.start,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w300),
-                vSpacer(spacing_4),
-                CustomText(
-                    textName: 'Private Banker',
-                    textAlign: TextAlign.start,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w200),
-              ],
+                  vSpacer(spacing_8),
+                  CustomText(
+                      textName: acsAppointmentController!.respGetBanker['value']
+                      [index]['displayName']
+                          .toString(),
+                      textAlign: TextAlign.start,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w300),
+                  vSpacer(spacing_4),
+                  CustomText(
+                      textName: 'Private Banker',
+                      textAlign: TextAlign.start,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w200),
+                ],
+              ),
             ),
           ),
         ),
