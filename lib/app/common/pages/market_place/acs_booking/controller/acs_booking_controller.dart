@@ -113,8 +113,9 @@ class ACSBookingController extends BaseController {
 
     final requestString = json.encode(body);
 
+    var emailId = Constants.get_schedule_user_service_email_id;
     var url = Uri.parse(
-        'https://graph.microsoft.com/v1.0/users/admin@27r4l5.onmicrosoft.com/calendar/getSchedule');
+        'https://graph.microsoft.com/v1.0/users/$emailId/calendar/getSchedule');
     final response = await http.post(url,
         headers: {
           "Authorization": "Bearer " + acsToken,
@@ -163,15 +164,16 @@ class ACSBookingController extends BaseController {
   }
 
   Future getBookingDelegateTokenAPI() async {
+    var tenantId = Constants.tenant_id;
     var url = Uri.parse(
-        'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/token');
+        'https://login.microsoftonline.com/$tenantId/oauth2/v2.0/token');
 
     final response = await http.post(
       url,
       body: {
-        'client_id': 'e6197263-b986-4f08-9a27-08a4ec1b5c8e',
+        'client_id': Constants.client_id,
         'scope': 'https://graph.microsoft.com/.default',
-        'client_secret':'4k48Q~wbivlxdFIbyVcNg3ykunlNdI.vcyC2Kbi0',
+        'client_secret':Constants.client_secret,
         'grant_type':'client_credentials'
       },
     );

@@ -168,9 +168,10 @@ class ACSChatCallingPhonePageState
   }
 
   Future getTokenAPI() async{
-    var url = Uri.parse('https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/token');
+    var tenantId = Constants.tenant_id;
+    var url = Uri.parse('https://login.microsoftonline.com/$tenantId/oauth2/v2.0/token');
     final response = await http.post(
-      url, body: {'client_id': 'e6197263-b986-4f08-9a27-08a4ec1b5c8e', 'scope': 'https://graph.microsoft.com/.default', 'client_secret':'4k48Q~wbivlxdFIbyVcNg3ykunlNdI.vcyC2Kbi0', 'grant_type':'client_credentials'}
+      url, body: {'client_id': Constants.client_id, 'scope': 'https://graph.microsoft.com/.default', 'client_secret':Constants.client_secret, 'grant_type':'client_credentials'}
     );
 
     var convertDataToJson = jsonDecode(response.body);

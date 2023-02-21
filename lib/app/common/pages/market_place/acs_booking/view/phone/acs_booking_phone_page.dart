@@ -35,7 +35,7 @@ class ACSBookingPhonePageState
   ACSBookingController? acsBookingController =
       ACSBookingController(ACSChatCallingDataRepository());
 
-  static const Channel = MethodChannel('com.citi.marketplace.host');
+  static const Channel = MethodChannel(Constants.Method_Channel_Name);
 
   DateTime setDate = DateTime.now();
 
