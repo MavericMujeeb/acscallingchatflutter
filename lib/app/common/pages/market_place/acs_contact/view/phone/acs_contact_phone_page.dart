@@ -26,7 +26,7 @@ class ACSContactPhonePageState
 
   ACSContactController? productDetailsController;
 
-  static const Channel = MethodChannel('com.citi.marketplace.host');
+  static const Channel = MethodChannel(Constants.Method_Channel_Name);
 
   int selectedTabIndex = 0;
 

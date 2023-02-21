@@ -71,12 +71,21 @@ class AppColor {
 class Constants {
   //API settings config
   static const String service_email_id = 'JohnsonFamilyBusiness1@27r4l5.onmicrosoft.com';
+  static const String booking_list_user_service_email_id = 'chantalkendall@27r4l5.onmicrosoft.com';
+  static const String get_schedule_user_service_email_id = 'admin@27r4l5.onmicrosoft.com';
+
+  static const String tenant_id = '4c4985fe-ce8e-4c2f-97e6-b037850b777d';
+  static const String client_id = 'e6197263-b986-4f08-9a27-08a4ec1b5c8e';
+  static const String client_secret = '4k48Q~wbivlxdFIbyVcNg3ykunlNdI.vcyC2Kbi0';
 
   //User Info data set for hardcoded, it should not break code in flutter
   //when user logged-in from iOS it'll be dynamic content
   static String userName = 'Janet Johnson';
   static String userEmail = 'janetjohnsonfamily83@gmail.com';
   static String userId = 'a2194b29-07bb-48bb-8607-6151334cf904';
+
+  //Communication bridge channel name for iOS, Android, Flutter
+  static const String Method_Channel_Name = 'com.maveric.citiacsdemo';
 
   static const String loggedInUser_key = "loggedInUser";
   static const String app_serach = 'search';

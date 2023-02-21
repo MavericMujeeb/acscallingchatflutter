@@ -33,7 +33,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
   ACSAppointmentController? acsAppointmentController =
       ACSAppointmentController(ACSChatCallingDataRepository());
 
-  static const Channel = MethodChannel('com.citi.marketplace.host');
+  static const Channel = MethodChannel(Constants.Method_Channel_Name);
 
   int selectedTabIndex = 0;
 

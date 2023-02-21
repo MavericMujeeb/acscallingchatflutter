@@ -27,12 +27,13 @@ class ACSAppointmentController extends BaseController {
 
     inProgress = true;
     serviceId = Constants.service_email_id;
+    var tenantId = Constants.tenant_id;
     var url = Uri.parse(
-        'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/token');
+        'https://login.microsoftonline.com/$tenantId/oauth2/v2.0/token');
     final response = await http.post(url, body: {
-      'client_id': 'e6197263-b986-4f08-9a27-08a4ec1b5c8e',
+      'client_id': Constants.client_id,
       'scope': 'https://graph.microsoft.com/.default',
-      'client_secret': '4k48Q~wbivlxdFIbyVcNg3ykunlNdI.vcyC2Kbi0',
+      'client_secret': Constants.client_secret,
       'grant_type': 'client_credentials'
     });
 
@@ -106,8 +107,9 @@ class ACSAppointmentController extends BaseController {
     // print(currentTime);
     // print(finalstartDate);
     // print(finalendDate);
+    var emailId = Constants.booking_list_user_service_email_id;
     var url = Uri.parse(
-        'https://graph.microsoft.com/v1.0/users/chantalkendall@27r4l5.onmicrosoft.com/calendar/calendarView?\$top=100&startDateTime=$finalstartDate&endDateTime=$finalendDate');
+        'https://graph.microsoft.com/v1.0/users/$emailId/calendar/calendarView?\$top=100&startDateTime=$finalstartDate&endDateTime=$finalendDate');
     // 'https://graph.microsoft.com/v1.0/users/GatesFamilyOffice@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-17T00:00:00-08:00&endDateTime=2023-01-19T19:00:00-08:00');
     // 'https://graph.microsoft.com/v1.0/users/kishan@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-22T13:45:00-08:00&endDateTime=2023-02-24T00:00:00-08:00');
     print("URL->"+url.toString());
