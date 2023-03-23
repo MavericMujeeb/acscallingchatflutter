@@ -51,6 +51,10 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
   static const spacing_14 = 14.0;
   static const spacing_16 = 16.0;
   static const spacing_18 = 18.0;
+  static const spacing_20 = 20.0;
+  static const spacing_22 = 22.0;
+
+  static const bankerIconSize = 25.0;
 
   // var resp;
   //
@@ -64,8 +68,8 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
 
   Future<void> chatWithBanker(username) async {
     print(username);
-    await Channel.invokeMethod('startChat',
-        <String, String>{'user_name': username});
+    await Channel.invokeMethod(
+        'startChat', <String, String>{'user_name': username});
   }
 
   Future incomingMethodHandler() async {
@@ -256,7 +260,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                   fontWeight: FontWeight.w500),
               vSpacer(12),
               SizedBox(
-                height: 120,
+                height: 200,
                 child: acsAppointmentController!.respGetBanker != null &&
                         acsAppointmentController!
                                 .respGetBanker['value'].length >
@@ -308,7 +312,7 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
       scrollDirection: Axis.horizontal,
       // shrinkWrap: true,
       // itemCount: 10,
-      itemCount: /*acsAppointmentController!.respGetBanker['value'].length*/ 1,
+      itemCount: acsAppointmentController!.respGetBanker['value'].length,
       itemBuilder: (BuildContext context, int index) {
         return bankerListCell(index);
       });
@@ -323,52 +327,98 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
       });
 
   Widget bankerListCell(int index) => SizedBox(
-        width: MediaQuery.of(context).size.width - 30,
-        child: GestureDetector(
-          onTap: ()=> chatWithBanker(acsAppointmentController!.respGetBanker['value']
-          [index]['emailAddress']),
-          child: Card(
-            color: Colors.white,
-            elevation: 2.0,
-            shadowColor: Colors.black,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(spacing_14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(40.0),
-                    child: Image.asset(
-                      index == 0
-                          ? Resources.user_3
-                          : index == 1
-                          ? Resources.user_1
-                          : Resources.user_2,
-                      height: 40.0,
-                      width: 40.0,
-                      fit: BoxFit.fill,
-                    ),
+        width: MediaQuery.of(context).size.width / 2.15,
+        child: Card(
+          color: Colors.white,
+          elevation: 2.0,
+          shadowColor: Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(spacing_14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                  child: Image.asset(
+                    index == 0 ? Resources.available : Resources.busy,
+                    height: 10.0,
+                    width: 10.0,
+                    fit: BoxFit.fill,
                   ),
-                  vSpacer(spacing_8),
-                  CustomText(
-                      textName: acsAppointmentController!.respGetBanker['value']
-                      [index]['displayName']
-                          .toString(),
-                      textAlign: TextAlign.start,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w300),
-                  vSpacer(spacing_4),
-                  CustomText(
-                      textName: 'Private Banker',
-                      textAlign: TextAlign.start,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w200),
-                ],
-              ),
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(40.0),
+                  child: Image.asset(
+                    index == 0
+                        ? Resources.user_3
+                        : index == 1
+                            ? Resources.user_1
+                            : Resources.user_2,
+                    height: 50.0,
+                    width: 50.0,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                vSpacer(spacing_8),
+                CustomText(
+                    textName: acsAppointmentController!.respGetBanker['value']
+                            [index]['displayName']
+                        .toString(),
+                    textAlign: TextAlign.start,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w300),
+                vSpacer(spacing_4),
+                CustomText(
+                    textName: 'Private Banker',
+                    textAlign: TextAlign.start,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w200),
+                vSpacer(spacing_16),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => {},
+                      child: Image.asset(
+                        Resources.phone,
+                        height: bankerIconSize,
+                        width: bankerIconSize,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    hSpacer(spacing_22),
+                    GestureDetector(
+                      onTap: () => {},
+                      child: Image.asset(
+                        Resources.videocall,
+                        height: bankerIconSize,
+                        width: bankerIconSize,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    hSpacer(spacing_22),
+                    GestureDetector(
+                      onTap: () => {
+                        index == 0
+                            ? chatWithBanker(acsAppointmentController!
+                                .respGetBanker['value'][index]['emailAddress'])
+                            : null
+                      },
+                      child: Image.asset(
+                        Resources.message,
+                        height: bankerIconSize,
+                        width: bankerIconSize,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
