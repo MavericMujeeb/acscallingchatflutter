@@ -6,6 +6,11 @@ class Resources {
   static const String user_1 = 'assets/images/user_1.png';
   static const String user_2 = 'assets/images/user_2.png';
   static const String user_3 = 'assets/images/user_3.png';
+  static const String phone = 'assets/images/phone.png';
+  static const String videocall = 'assets/images/videocall.png';
+  static const String message = 'assets/images/message.png';
+  static const String busy = 'assets/images/busy.png';
+  static const String available = 'assets/images/available.png';
 
   // static const int number = 0;
   static int number = 0;
