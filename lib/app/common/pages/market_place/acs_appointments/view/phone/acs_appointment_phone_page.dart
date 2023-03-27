@@ -53,6 +53,9 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
   static const spacing_18 = 18.0;
   static const spacing_20 = 20.0;
   static const spacing_22 = 22.0;
+  static const spacing_24 = 24.0;
+  static const spacing_26 = 26.0;
+  static const spacing_28 = 28.0;
 
   static const bankerIconSize = 25.0;
 
@@ -70,6 +73,18 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
     print(username);
     await Channel.invokeMethod(
         'startChat', <String, String>{'user_name': username});
+  }
+
+  Future<void> audioCallWithBanker(username) async {
+    print(username);
+    await Channel.invokeMethod(
+        'startAudioCall', <String, String>{'user_name': username});
+  }
+
+  Future<void> videoCallWithBanker(username) async {
+    print(username);
+    await Channel.invokeMethod(
+        'startVideoCall', <String, String>{'user_name': username});
   }
 
   Future incomingMethodHandler() async {
@@ -383,7 +398,12 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
-                      onTap: () => {},
+                      onTap: () => {
+                        index == 0
+                            ? audioCallWithBanker(acsAppointmentController!
+                            .respGetBanker['value'][index]['emailAddress'])
+                            : null
+                      },
                       child: Image.asset(
                         Resources.phone,
                         height: bankerIconSize,
@@ -391,9 +411,14 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                         fit: BoxFit.fill,
                       ),
                     ),
-                    hSpacer(spacing_22),
+                    hSpacer(spacing_26),
                     GestureDetector(
-                      onTap: () => {},
+                      onTap: () => {
+                        index == 0
+                            ? videoCallWithBanker(acsAppointmentController!
+                            .respGetBanker['value'][index]['emailAddress'])
+                            : null
+                      },
                       child: Image.asset(
                         Resources.videocall,
                         height: bankerIconSize,
@@ -401,13 +426,11 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                         fit: BoxFit.fill,
                       ),
                     ),
-                    hSpacer(spacing_22),
+                    hSpacer(spacing_26),
                     GestureDetector(
                       onTap: () => {
-                        index == 0
-                            ? chatWithBanker(acsAppointmentController!
-                                .respGetBanker['value'][index]['emailAddress'])
-                            : null
+                        chatWithBanker(acsAppointmentController!
+                            .respGetBanker['value'][index]['emailAddress'])
                       },
                       child: Image.asset(
                         Resources.message,
