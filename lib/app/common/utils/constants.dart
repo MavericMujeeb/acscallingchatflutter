@@ -75,13 +75,14 @@ class AppColor {
 
 class Constants {
   //API settings config
-  static const String service_email_id = 'JohnsonFamilyBusiness1@27r4l5.onmicrosoft.com';
-  static const String booking_list_user_service_email_id = 'chantalkendall@27r4l5.onmicrosoft.com';
-  static const String get_schedule_user_service_email_id = 'admin@27r4l5.onmicrosoft.com';
+  static const String service_email_id = 'Familyofficemeetings@acsteamsciti.onmicrosoft.com';
+  static const String booking_list_user_service_email_id = 'chantal@acsteamsciti.onmicrosoft.com';
+  static const String get_schedule_user_service_email_id = 'sumit@acsteamsciti.onmicrosoft.com';
 
-  static const String tenant_id = '4c4985fe-ce8e-4c2f-97e6-b037850b777d';
-  static const String client_id = 'e6197263-b986-4f08-9a27-08a4ec1b5c8e';
-  static const String client_secret = '4k48Q~wbivlxdFIbyVcNg3ykunlNdI.vcyC2Kbi0';
+  static const String tenant_id = '32d79529-3def-4795-9bcb-308a00b7d53d';
+  static const String client_id = 'e6c53397-3b1c-4360-b761-6255d59fc852';
+  static const String client_secret = 'iKJ8Q~rdN3mYlLl.PMCWPc4FqseHZOz4zz5qHbea';
+  static const String redirect_uri = 'https://oauth.pstmn.io/v1/browser-callback';
 
   //User Info data set for hardcoded, it should not break code in flutter
   //when user logged-in from iOS it'll be dynamic content

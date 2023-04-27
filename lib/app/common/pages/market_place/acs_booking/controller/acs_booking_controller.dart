@@ -253,7 +253,7 @@ class ACSBookingController extends BaseController {
           "recipients": "staff"
         }
       ],
-      "serviceId": "3e3fa061-225b-40fc-852c-c17a2a2d96eb",
+      "serviceId": "ed7bb34e-0f31-4b30-b190-4795be6381ea",
       "serviceLocation": {
         "@odata.type": "#microsoft.graph.location",
         "address": {
@@ -288,7 +288,7 @@ class ACSBookingController extends BaseController {
           "customerId": Constants.userId,
           "name": Constants.userName,
           "emailAddress": Constants.userEmail,
-          "phone": "862-228-7032",
+          "phone": "469-524-9869",
           "notes": null,
           "location": {
             "@odata.type": "#microsoft.graph.location",
