@@ -72,7 +72,7 @@ class ACSBookingPhonePageState
   var strCodeResaponseURL = '';
 
   var strGetCodeUrl =
-      'https://login.microsoftonline.com/4c4985fe-ce8e-4c2f-97e6-b037850b777d/oauth2/v2.0/authorize?response_type=code&client_id=e6197263-b986-4f08-9a27-08a4ec1b5c8e&scope=https://graph.microsoft.com/.default&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&state=12345';
+      'https://login.microsoftonline.com/${Constants.tenant_id}/oauth2/v2.0/authorize?response_type=code&client_id=${Constants.client_id}&scope=https://graph.microsoft.com/.default&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&state=12345';
 
   @override
   void initState() {
