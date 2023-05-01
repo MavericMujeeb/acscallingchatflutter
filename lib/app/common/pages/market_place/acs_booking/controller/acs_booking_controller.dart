@@ -45,8 +45,16 @@ class ACSBookingController extends BaseController {
     acsToken = await AppSharedPreference()
         .getString(key: SharedPrefKey.prefs_acs_token);
 
-    respGetBanker = await getBankersListAPI();
-
+    var responseGetBanker = await getBankersListAPI();
+    if (responseGetBanker['value'] != null &&
+        responseGetBanker['value'].length > 0) {
+      respGetBanker = responseGetBanker['value']
+          .where((item) =>
+      item['displayName'] == "Chantal Kendall")
+          .toList();
+    } else {
+      respGetBanker = responseGetBanker;
+    }
     inProgress = false;
 
     // DateTime today = new DateTime.now();

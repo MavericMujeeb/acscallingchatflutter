@@ -75,7 +75,7 @@ class AppColor {
 
 class Constants {
   //API settings config
-  static const String service_email_id = 'Familyofficemeetings@acsteamsciti.onmicrosoft.com';
+  static const String service_email_id = 'JohnsonFamilyBusiness@acsteamsciti.onmicrosoft.com';
   static const String booking_list_user_service_email_id = 'chantal@acsteamsciti.onmicrosoft.com';
   static const String get_schedule_user_service_email_id = 'sumit@acsteamsciti.onmicrosoft.com';
 
