@@ -359,7 +359,8 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                 Padding(
                   padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
                   child: Image.asset(
-                    index == 0 ? Resources.available : Resources.busy,
+                    acsAppointmentController!.respGetBanker['value']
+                    [index]['displayName'] == "Chantal Kendall" ? Resources.available : Resources.busy,
                     height: 10.0,
                     width: 10.0,
                     fit: BoxFit.fill,
@@ -368,7 +369,8 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                 ClipRRect(
                   borderRadius: BorderRadius.circular(40.0),
                   child: Image.asset(
-                    index == 0
+                    acsAppointmentController!.respGetBanker['value']
+                    [index]['displayName'] == "Chantal Kendall"
                         ? Resources.user_3
                         : index == 1
                             ? Resources.user_1
@@ -399,7 +401,8 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                   children: [
                     GestureDetector(
                       onTap: () => {
-                        index == 0
+                        acsAppointmentController!.respGetBanker['value']
+                        [index]['displayName'] == "Chantal Kendall"
                             ? audioCallWithBanker(acsAppointmentController!
                             .respGetBanker['value'][index]['emailAddress'])
                             : null
@@ -414,7 +417,8 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                     hSpacer(spacing_26),
                     GestureDetector(
                       onTap: () => {
-                        index == 0
+                        acsAppointmentController!.respGetBanker['value']
+                        [index]['displayName'] == "Chantal Kendall"
                             ? videoCallWithBanker(acsAppointmentController!
                             .respGetBanker['value'][index]['emailAddress'])
                             : null

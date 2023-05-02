@@ -85,15 +85,15 @@ class ACSBookingPhonePageState
   void getBankersList() async {
     await acsBookingController?.getBankersList();
     _selectedBanker = List.generate(
-        acsBookingController!.respGetBanker['value'].length, (i) => false);
+        acsBookingController!.respGetBanker.length, (i) => false);
     _selectedBanker[0] = true;
     acsBookingController!.selectedBankerEmailId = acsBookingController!
-        .respGetBanker['value'][0]['emailAddress']
+        .respGetBanker[0]['emailAddress']
         .toString();
     acsBookingController!.selectedBankerId =
-        acsBookingController!.respGetBanker['value'][0]['id'].toString();
+        acsBookingController!.respGetBanker[0]['id'].toString();
     acsBookingController!.selectedBankerName = acsBookingController!
-        .respGetBanker['value'][0]['displayName']
+        .respGetBanker[0]['displayName']
         .toString();
 
     String formattedDate = DateFormat('yyyy-MM-dd').format(today);
@@ -149,23 +149,23 @@ class ACSBookingPhonePageState
             getScheduleResponse['value'][0]['availabilityView'] != null
         ? getScheduleResponse['value'][0]['availabilityView'].split('')
         : "000000000000000000".split('');
-    var startWorkingHr = acsBookingController!.respGetBanker['value'] != null &&
-        acsBookingController!.respGetBanker['value'].length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'] != null &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'].length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] != null &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] .length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['startTime'] != null
-        ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['startTime']
+    var startWorkingHr = acsBookingController!.respGetBanker != null &&
+        acsBookingController!.respGetBanker.length > 0 &&
+        acsBookingController!.respGetBanker[0]['workingHours'] != null &&
+        acsBookingController!.respGetBanker[0]['workingHours'].length > 0 &&
+        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'] != null &&
+        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'] .length > 0 &&
+        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'][0]['startTime'] != null
+        ? acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'][0]['startTime']
         : "14:00:00.0000000";
-    var endWorkingHr = acsBookingController!.respGetBanker['value'] != null &&
-        acsBookingController!.respGetBanker['value'].length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'] != null &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'].length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] != null &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] .length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['endTime'] != null
-        ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['endTime']
+    var endWorkingHr = acsBookingController!.respGetBanker != null &&
+        acsBookingController!.respGetBanker.length > 0 &&
+        acsBookingController!.respGetBanker[0]['workingHours'] != null &&
+        acsBookingController!.respGetBanker[0]['workingHours'].length > 0 &&
+        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'] != null &&
+        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'] .length > 0 &&
+        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'][0]['endTime'] != null
+        ? acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'][0]['endTime']
         : "23:00:00.0000000";
 
     var startTimeFormat = DateFormat("HH:mm:ss").parse(startWorkingHr, true);
@@ -376,7 +376,7 @@ class ACSBookingPhonePageState
       );
 
   Widget containerBankerList() => acsBookingController!.respGetBanker != null &&
-          acsBookingController!.respGetBanker['value'].length > 0
+          acsBookingController!.respGetBanker.length > 0
       ? listBankers()
       : SizedBox(
           height: 100,
@@ -401,13 +401,13 @@ class ACSBookingPhonePageState
           }
           _selectedBanker[index] = true;
           acsBookingController!.selectedBankerEmailId = acsBookingController!
-              .respGetBanker['value'][index]['emailAddress']
+              .respGetBanker[index]['emailAddress']
               .toString();
           acsBookingController!.selectedBankerId = acsBookingController!
-              .respGetBanker['value'][index]['id']
+              .respGetBanker[index]['id']
               .toString();
           acsBookingController!.selectedBankerName = acsBookingController!
-              .respGetBanker['value'][index]['displayName']
+              .respGetBanker[index]['displayName']
               .toString();
 
           acsBookingController!.pickedStartTime = "";
@@ -446,7 +446,7 @@ class ACSBookingPhonePageState
                       children: [
                         CustomText(
                             textName: acsBookingController!
-                                .respGetBanker['value'][index]['displayName']
+                                .respGetBanker[index]['displayName']
                                 .toString(),
                             textAlign: TextAlign.start,
                             fontSize: 15,

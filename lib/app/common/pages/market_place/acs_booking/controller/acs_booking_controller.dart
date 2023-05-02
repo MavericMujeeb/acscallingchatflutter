@@ -45,8 +45,16 @@ class ACSBookingController extends BaseController {
     acsToken = await AppSharedPreference()
         .getString(key: SharedPrefKey.prefs_acs_token);
 
-    respGetBanker = await getBankersListAPI();
-
+    var responseGetBanker = await getBankersListAPI();
+    if (responseGetBanker['value'] != null &&
+        responseGetBanker['value'].length > 0) {
+      respGetBanker = responseGetBanker['value']
+          .where((item) =>
+      item['displayName'] == "Chantal Kendall")
+          .toList();
+    } else {
+      respGetBanker = responseGetBanker;
+    }
     inProgress = false;
 
     // DateTime today = new DateTime.now();
@@ -253,7 +261,7 @@ class ACSBookingController extends BaseController {
           "recipients": "staff"
         }
       ],
-      "serviceId": "ed7bb34e-0f31-4b30-b190-4795be6381ea",
+      "serviceId": Constants.booking_service_id,
       "serviceLocation": {
         "@odata.type": "#microsoft.graph.location",
         "address": {
@@ -277,7 +285,7 @@ class ACSBookingController extends BaseController {
         "uniqueIdType@odata.type": "#microsoft.graph.locationUniqueIdType",
         "uniqueIdType": null
       },
-      "serviceName": "30-min meeting",
+      "serviceName": Constants.booking_service_name,
       "serviceNotes": "Customer requires punctual service.",
       "maximumAttendeesCount": 1,
       "filledAttendeesCount": 1,

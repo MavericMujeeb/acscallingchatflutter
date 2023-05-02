@@ -75,7 +75,7 @@ class AppColor {
 
 class Constants {
   //API settings config
-  static const String service_email_id = 'Familyofficemeetings@acsteamsciti.onmicrosoft.com';
+  static const String service_email_id = 'JohnsonFamilyOffice@acsteamsciti.onmicrosoft.com';
   static const String booking_list_user_service_email_id = 'chantal@acsteamsciti.onmicrosoft.com';
   static const String get_schedule_user_service_email_id = 'sumit@acsteamsciti.onmicrosoft.com';
 
@@ -83,6 +83,8 @@ class Constants {
   static const String client_id = 'e6c53397-3b1c-4360-b761-6255d59fc852';
   static const String client_secret = 'iKJ8Q~rdN3mYlLl.PMCWPc4FqseHZOz4zz5qHbea';
   static const String redirect_uri = 'https://oauth.pstmn.io/v1/browser-callback';
+  static const String booking_service_id = '8b44f366-7609-4302-a578-a707297ce649';
+  static const String booking_service_name = 'Family office meeting';
 
   //User Info data set for hardcoded, it should not break code in flutter
   //when user logged-in from iOS it'll be dynamic content
