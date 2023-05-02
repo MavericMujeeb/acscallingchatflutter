@@ -352,8 +352,11 @@ class ACSBookingController extends BaseController {
       var convertDataToJson = jsonDecode(response.body);
       return convertDataToJson;
     } else {
+      var convertDataToJson = jsonDecode(response.body);
+      var convertErrorMessageData = jsonDecode(convertDataToJson['error']['message']);
       // return "Error there : "+response.statusCode.toString();
-      return "Error";
+      return "Error: "+convertErrorMessageData['error']['message'];
+      //return "${"Error "+convertDataToJson['error']['code']}, "+convertErrorMessageData['error']['message'];
     }
 
     // var convertDataToJson = jsonDecode(response.body);
