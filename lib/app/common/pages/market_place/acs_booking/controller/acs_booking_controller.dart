@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:acscallingchatflutter/app/common/pages/base/controller/base_controller.dart';
 import 'package:acscallingchatflutter/app/common/utils/constants.dart';
@@ -9,7 +6,6 @@ import 'package:acscallingchatflutter/data/helpers/shared_preferences.dart';
 import 'package:acscallingchatflutter/domain/entities/product_dao.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:oauth2/oauth2.dart' as oauth2;
 
 class ACSBookingController extends BaseController {
   List<ProductDao> similarApps = [];
