@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter_js/flutter_js.dart';
-import 'package:get/state_manager.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:acscallingchatflutter/app/common/navigation/navigation.dart';
 import 'package:acscallingchatflutter/app/common/utils/constants.dart';
-import 'package:acscallingchatflutter/app/common/utils/javascript_services.dart';
 import 'package:acscallingchatflutter/app/widgets/custom_badge.dart';
 import 'package:acscallingchatflutter/app/widgets/custom_gradient_container.dart';
-import 'package:acscallingchatflutter/data/helpers/shared_preferences.dart';
 
 class CustomAppCard extends StatelessWidget {
   final String productImagePath;
@@ -29,7 +24,6 @@ class CustomAppCard extends StatelessWidget {
       this.detailActionCallBack})
       : super(key: key);
 
-  final box = GetStorage();
 
   Widget get productImageWidget => SizedBox(
         height: 120.0,

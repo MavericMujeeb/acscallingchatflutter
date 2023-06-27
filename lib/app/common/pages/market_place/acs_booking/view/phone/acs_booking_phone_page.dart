@@ -1,22 +1,13 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:acscallingchatflutter/app/common/utils/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:acscallingchatflutter/app/common/navigation/navigation.dart';
 import 'package:acscallingchatflutter/app/widgets/custom_text.dart';
-import 'package:acscallingchatflutter/data/helpers/shared_preferences.dart';
 import 'package:acscallingchatflutter/data/repositories/acs_chat_calling_repositories.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-
 import '../../../../../utils/constants.dart';
 import '../../controller/acs_booking_controller.dart';
-import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 import 'package:http/http.dart' as http;
 
 class ACSBookingPhonePage extends View {
@@ -66,11 +57,7 @@ class ACSBookingPhonePageState
 
   List<String> timeslots = [];
   var splitTime;
-
-  bool isWebView = false;
-  late final WebViewController _controller;
   var strCodeResaponseURL = '';
-
   var strGetCodeUrl =
       'https://login.microsoftonline.com/${Constants.tenant_id}/oauth2/v2.0/authorize?response_type=code&client_id=${Constants.client_id}&scope=https://graph.microsoft.com/.default&redirect_uri=https://oauth.pstmn.io/v1/browser-callback&state=12345';
 
@@ -101,42 +88,6 @@ class ACSBookingPhonePageState
     getAppoinments(today.weekday - 1, formattedDate);
 
     setState(() {});
-  }
-
-  void setWebviewController() {
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
-            // Update loading bar.
-          },
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {
-            print("OnFinished response url is : " + url.toString());
-            if (url.contains('browser-callback?')) {
-              strCodeResaponseURL = url.toString();
-              List<String> strSplitURL = strCodeResaponseURL.split("code=");
-              // acsBookingController!.strCode = strSplitURL[1];
-              var strCodeWithStateSession = strSplitURL[1];
-
-              List<String> strSplitURL1 =
-                  strCodeWithStateSession.split("&state=");
-              acsBookingController!.strCode = strSplitURL1[0];
-
-              print("Code on response is : " +
-                  acsBookingController!.strCode.toString());
-
-              isWebView = false;
-
-              bookAnAppointment();
-              setState(() {});
-            }
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse(strGetCodeUrl));
   }
 
   getAppoinments(int weekday, String date) async {
@@ -218,38 +169,7 @@ class ACSBookingPhonePageState
   Widget get loadWebView => Container(
         height: double.infinity,
         width: double.infinity,
-        child: Column(
-          children: [
-            Container(
-              height: 60,
-              width: double.infinity,
-              color: Colors.blueGrey,
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      isWebView = false;
-                      setState(() {});
-                    },
-                    child: Icon(
-                      Icons.cancel_outlined,
-                      size: 40,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                color: Colors.white,
-                child: WebViewWidget(controller: _controller),
-              ),
-            ),
-          ],
-        ),
+        child: const SizedBox(),
       );
 
   @override
@@ -264,7 +184,7 @@ class ACSBookingPhonePageState
         ),
         // key: globalKey,
         body: SafeArea(
-          child: isWebView ? loadWebView : bookingContent,
+          child: bookingContent,
           /*child: ControlledWidgetBuilder<ACSBookingController>(
             builder: (context, controller) {
               // acsBookingController = controller;
@@ -321,8 +241,6 @@ class ACSBookingPhonePageState
             CustomSnackBar().showToast(context, Constants.selectTimeSlotMsg, false);
 
           } else {
-            //setWebviewController();
-            isWebView = false;
             bookAnAppointment();
             setState(() {});
           }
