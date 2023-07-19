@@ -76,8 +76,7 @@ class ACSAppointmentController extends BaseController {
   }
 
   Future getBankersListAPI() async {
-    serviceId = await AppSharedPreference()
-        .getString(key: SharedPrefKey.prefs_service_id);
+    serviceId =Constants.service_email_id;
     var url = Uri.parse(
         'https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceId/staffMembers/');
     final response =

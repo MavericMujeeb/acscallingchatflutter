@@ -46,7 +46,7 @@ class ACSBookingController extends BaseController {
         responseGetBanker['value'].length > 0) {
       respGetBanker = responseGetBanker['value']
           .where((item) =>
-      item['displayName'] == "Chantal Kendall")
+      item['displayName'] == Constants.bankerUserName)
           .toList();
     } else {
       respGetBanker = responseGetBanker;
@@ -65,8 +65,7 @@ class ACSBookingController extends BaseController {
 
     acsToken = await AppSharedPreference()
         .getString(key: SharedPrefKey.prefs_acs_token);
-    serviceId = await AppSharedPreference()
-        .getString(key: SharedPrefKey.prefs_service_id);
+    serviceId = Constants.service_email_id;
 
     resp = await getAwailableSlotsAPI(date);
 
@@ -77,8 +76,7 @@ class ACSBookingController extends BaseController {
   }
 
   Future getBankersListAPI() async {
-    serviceId = await AppSharedPreference()
-        .getString(key: SharedPrefKey.prefs_service_id);
+    serviceId = Constants.service_email_id;
     var url = Uri.parse(
         'https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceId/staffMembers/');
     final response =

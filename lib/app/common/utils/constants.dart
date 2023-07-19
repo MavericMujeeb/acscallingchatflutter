@@ -92,6 +92,8 @@ class Constants {
   static String userEmail = 'janetjohnsonfamily83@gmail.com';
   static String userId = 'a2194b29-07bb-48bb-8607-6151334cf904';
 
+  static String bankerUserName = 'Richard Jones';
+
   //Communication bridge channel name for iOS, Android, Flutter
   static const String Method_Channel_Name = 'com.maveric.citiacsdemo';
 
