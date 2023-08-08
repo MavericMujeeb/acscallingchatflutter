@@ -38,19 +38,19 @@ class ACSBookingController extends BaseController {
   Future getBankersList() async {
     inProgress = true;
 
-    acsToken = await AppSharedPreference()
-        .getString(key: SharedPrefKey.prefs_acs_token);
+    acsToken = Constants.ACS_TOKEN;
 
-    var responseGetBanker = await getBankersListAPI();
-    if (responseGetBanker['value'] != null &&
-        responseGetBanker['value'].length > 0) {
-      respGetBanker = responseGetBanker['value']
-          .where((item) =>
-      item['displayName'] == Constants.bankerUserName)
-          .toList();
-    } else {
-      respGetBanker = responseGetBanker;
-    }
+    respGetBanker = await getBankersListAPI();
+    // var responseGetBanker = await getBankersListAPI();
+    // if (responseGetBanker['value'] != null &&
+    //     responseGetBanker['value'].length > 0) {
+    //   respGetBanker = responseGetBanker['value']
+    //       .where((item) =>
+    //   item['displayName'] == Constants.bankerUserName || item['displayName'] == 'Stella Silva')
+    //       .toList();
+    // } else {
+    //   respGetBanker = responseGetBanker;
+    // }
     inProgress = false;
 
     // DateTime today = new DateTime.now();

@@ -39,6 +39,7 @@ class ACSAppointmentController extends BaseController {
     // acsToken = AppSharedPreference().getString(key: SharedPrefKey.prefs_acs_token);
     AppSharedPreference()
         .addString(key: SharedPrefKey.prefs_acs_token, value: acsToken);
+    Constants.ACS_TOKEN = acsToken;
 
     // acsToken = await AppSharedPreference().getString(key: SharedPrefKey.prefs_acs_token);
 
@@ -101,7 +102,7 @@ class ACSAppointmentController extends BaseController {
     // print(currentTime);
     // print(finalstartDate);
     // print(finalendDate);
-    var emailId = Constants.booking_list_user_service_email_id;
+    var emailId = Constants.service_email_id;
     var url = Uri.parse(
         'https://graph.microsoft.com/v1.0/users/$emailId/calendar/calendarView?\$top=100&startDateTime=$finalstartDate&endDateTime=$finalendDate');
     // 'https://graph.microsoft.com/v1.0/users/GatesFamilyOffice@27r4l5.onmicrosoft.com/calendar/calendarView?startDateTime=2023-01-17T00:00:00-08:00&endDateTime=2023-01-19T19:00:00-08:00');

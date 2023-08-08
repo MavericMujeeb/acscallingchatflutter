@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'constants.dart';
+
 class ResponsiveScreen {
   static const int largeScreen = 1200;
   static const int smallScreen = 800;
@@ -19,5 +21,15 @@ class ResponsiveScreen {
   //Large screen is any screen whose width is more than 1200 pixels
   static bool isLargeScreen(BuildContext context) {
     return MediaQuery.of(context).size.width > largeScreen;
+  }
+}
+
+class Utility {
+  static String getUserProfileImage(String name, int index) {
+    return name == Constants.bankerUserName
+        ? Resources.user_3
+        : index == 0
+            ? Resources.user_1
+            : Resources.user_2;
   }
 }

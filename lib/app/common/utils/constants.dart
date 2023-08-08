@@ -94,6 +94,8 @@ class Constants {
 
   static String bankerUserName = 'Richard Jones';
 
+  static String ACS_TOKEN = '';
+
   //Communication bridge channel name for iOS, Android, Flutter
   static const String Method_Channel_Name = 'com.maveric.citiacsdemo';
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:acscallingchatflutter/app/common/navigation/pages.dart';
 import 'package:acscallingchatflutter/app/common/utils/custom_snackbar.dart';
+import 'package:acscallingchatflutter/app/common/utils/utility.dart';
 import 'package:acscallingchatflutter/domain/entities/user_info_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -369,12 +370,8 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                 ClipRRect(
                   borderRadius: BorderRadius.circular(40.0),
                   child: Image.asset(
-                    acsAppointmentController!.respGetBanker['value']
-                    [index]['displayName'] == Constants.bankerUserName
-                        ? Resources.user_3
-                        : index == 0
-                            ? Resources.user_1
-                            : Resources.user_2,
+                    Utility.getUserProfileImage(acsAppointmentController!.respGetBanker['value']
+                    [index]['displayName'], index),
                     height: 50.0,
                     width: 50.0,
                     fit: BoxFit.fill,

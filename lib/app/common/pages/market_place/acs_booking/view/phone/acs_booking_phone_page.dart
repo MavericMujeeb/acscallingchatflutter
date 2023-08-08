@@ -7,6 +7,7 @@ import 'package:acscallingchatflutter/app/common/navigation/navigation.dart';
 import 'package:acscallingchatflutter/app/widgets/custom_text.dart';
 import 'package:acscallingchatflutter/data/repositories/acs_chat_calling_repositories.dart';
 import '../../../../../utils/constants.dart';
+import '../../../../../utils/utility.dart';
 import '../../controller/acs_booking_controller.dart';
 import 'package:http/http.dart' as http;
 
@@ -72,15 +73,15 @@ class ACSBookingPhonePageState
   void getBankersList() async {
     await acsBookingController?.getBankersList();
     _selectedBanker = List.generate(
-        acsBookingController!.respGetBanker.length, (i) => false);
+        acsBookingController!.respGetBanker['value'].length, (i) => false);
     _selectedBanker[0] = true;
     acsBookingController!.selectedBankerEmailId = acsBookingController!
-        .respGetBanker[0]['emailAddress']
+        .respGetBanker['value'][0]['emailAddress']
         .toString();
     acsBookingController!.selectedBankerId =
-        acsBookingController!.respGetBanker[0]['id'].toString();
+        acsBookingController!.respGetBanker['value'][0]['id'].toString();
     acsBookingController!.selectedBankerName = acsBookingController!
-        .respGetBanker[0]['displayName']
+        .respGetBanker['value'][0]['displayName']
         .toString();
 
     String formattedDate = DateFormat('yyyy-MM-dd').format(today);
@@ -100,23 +101,23 @@ class ACSBookingPhonePageState
             getScheduleResponse['value'][0]['availabilityView'] != null
         ? getScheduleResponse['value'][0]['availabilityView'].split('')
         : "000000000000000000".split('');
-    var startWorkingHr = acsBookingController!.respGetBanker != null &&
-        acsBookingController!.respGetBanker.length > 0 &&
-        acsBookingController!.respGetBanker[0]['workingHours'] != null &&
-        acsBookingController!.respGetBanker[0]['workingHours'].length > 0 &&
-        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'] != null &&
-        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'] .length > 0 &&
-        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'][0]['startTime'] != null
-        ? acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'][0]['startTime']
+    var startWorkingHr = acsBookingController!.respGetBanker['value'] != null &&
+        acsBookingController!.respGetBanker['value'].length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'] != null &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'].length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] != null &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] .length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['startTime'] != null
+        ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['startTime']
         : "14:00:00.0000000";
-    var endWorkingHr = acsBookingController!.respGetBanker != null &&
-        acsBookingController!.respGetBanker.length > 0 &&
-        acsBookingController!.respGetBanker[0]['workingHours'] != null &&
-        acsBookingController!.respGetBanker[0]['workingHours'].length > 0 &&
-        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'] != null &&
-        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'] .length > 0 &&
-        acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'][0]['endTime'] != null
-        ? acsBookingController!.respGetBanker[0]['workingHours'][0]['timeSlots'][0]['endTime']
+    var endWorkingHr = acsBookingController!.respGetBanker['value'] != null &&
+        acsBookingController!.respGetBanker['value'].length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'] != null &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'].length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] != null &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] .length > 0 &&
+        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['endTime'] != null
+        ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['endTime']
         : "23:00:00.0000000";
 
     var startTimeFormat = DateFormat("HH:mm:ss").parse(startWorkingHr, true);
@@ -294,7 +295,8 @@ class ACSBookingPhonePageState
       );
 
   Widget containerBankerList() => acsBookingController!.respGetBanker != null &&
-          acsBookingController!.respGetBanker.length > 0
+      acsBookingController!.respGetBanker['value'] != null &&
+          acsBookingController!.respGetBanker['value'].length > 0
       ? listBankers()
       : SizedBox(
           height: 100,
@@ -307,7 +309,7 @@ class ACSBookingPhonePageState
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       // itemCount: 10,
-      itemCount: /*acsBookingController!.respGetBanker['value'].length*/1,
+      itemCount: acsBookingController!.respGetBanker['value'].length,
       itemBuilder: (BuildContext context, int index) {
         return bankerListCell(index);
       });
@@ -319,13 +321,13 @@ class ACSBookingPhonePageState
           }
           _selectedBanker[index] = true;
           acsBookingController!.selectedBankerEmailId = acsBookingController!
-              .respGetBanker[index]['emailAddress']
+              .respGetBanker['value'][index]['emailAddress']
               .toString();
           acsBookingController!.selectedBankerId = acsBookingController!
-              .respGetBanker[index]['id']
+              .respGetBanker['value'][index]['id']
               .toString();
           acsBookingController!.selectedBankerName = acsBookingController!
-              .respGetBanker[index]['displayName']
+              .respGetBanker['value'][index]['displayName']
               .toString();
 
           acsBookingController!.pickedStartTime = "";
@@ -351,7 +353,8 @@ class ACSBookingPhonePageState
                     ClipRRect(
                       borderRadius: BorderRadius.circular(40.0),
                       child: Image.asset(
-                        index == 0 ? Resources.user_3 : index == 1 ? Resources.user_1 : Resources.user_2,
+                        Utility.getUserProfileImage(acsBookingController!.respGetBanker['value']
+                        [index]['displayName'], index),
                         height: 40.0,
                         width: 40.0,
                         fit: BoxFit.fill,
@@ -364,7 +367,7 @@ class ACSBookingPhonePageState
                       children: [
                         CustomText(
                             textName: acsBookingController!
-                                .respGetBanker[index]['displayName']
+                                .respGetBanker['value'][index]['displayName']
                                 .toString(),
                             textAlign: TextAlign.start,
                             fontSize: 15,
