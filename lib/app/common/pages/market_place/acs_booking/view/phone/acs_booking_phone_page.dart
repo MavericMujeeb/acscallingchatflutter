@@ -429,7 +429,7 @@ class ACSBookingPhonePageState
                           height: 100,
                           child: Center(
                             child: CustomText(
-                                textName: Constants.noAppointments,
+                                textName: Constants.noAvailableTimeSlots,
                                 textAlign: TextAlign.center,
                                 fontSize: 14,
                                 fontWeight: FontWeight.normal),

@@ -171,6 +171,7 @@ class Constants {
   static const String joinMeeting = 'Join Meeting';
   static const String viewDetails = 'View Details';
   static const String noAppointments = 'No Appointments found';
+  static const String noAvailableTimeSlots = 'No time slots available,\nplease try again after some time.';
   static const String selectDate = 'Pick date';
   static const String pickTimeSlot = 'Pick available timeslot';
   static const String pickDate = 'Pick date';
