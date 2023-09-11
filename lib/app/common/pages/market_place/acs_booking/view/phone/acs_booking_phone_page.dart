@@ -96,12 +96,14 @@ class ACSBookingPhonePageState
         await acsBookingController?.getAwailableSlots(weekday, date);
     // _selected = List.generate(timeslots.length, (i) => false);
     //_selected[0] = true;
-    availableTimeSlots = getScheduleResponse['value'] != null &&
+    availableTimeSlots = getScheduleResponse != null &&
+        getScheduleResponse['value'] != null &&
             getScheduleResponse['value'].length > 0 &&
             getScheduleResponse['value'][0]['availabilityView'] != null
         ? getScheduleResponse['value'][0]['availabilityView'].split('')
         : "000000000000000000".split('');
-    var startWorkingHr = acsBookingController!.respGetBanker['value'] != null &&
+    var startWorkingHr = acsBookingController!.respGetBanker != null &&
+        acsBookingController!.respGetBanker['value'] != null &&
         acsBookingController!.respGetBanker['value'].length > 0 &&
         acsBookingController!.respGetBanker['value'][0]['workingHours'] != null &&
         acsBookingController!.respGetBanker['value'][0]['workingHours'].length > 0 &&
@@ -110,7 +112,8 @@ class ACSBookingPhonePageState
         acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['startTime'] != null
         ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['startTime']
         : "14:00:00.0000000";
-    var endWorkingHr = acsBookingController!.respGetBanker['value'] != null &&
+    var endWorkingHr = acsBookingController!.respGetBanker != null &&
+        acsBookingController!.respGetBanker['value'] != null &&
         acsBookingController!.respGetBanker['value'].length > 0 &&
         acsBookingController!.respGetBanker['value'][0]['workingHours'] != null &&
         acsBookingController!.respGetBanker['value'][0]['workingHours'].length > 0 &&
@@ -416,6 +419,8 @@ class ACSBookingPhonePageState
                       ),
                     )
                   : acsBookingController!.resp != null &&
+                  acsBookingController!
+                      .resp['value'] != null &&
                           acsBookingController!
                                   .resp['value'][0]['availabilityView'].length >
                               0

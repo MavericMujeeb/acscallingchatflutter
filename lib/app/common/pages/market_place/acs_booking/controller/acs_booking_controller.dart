@@ -63,8 +63,7 @@ class ACSBookingController extends BaseController {
   Future getAwailableSlots(int dayOfWeek, String date) async {
     inProgress = true;
 
-    acsToken = await AppSharedPreference()
-        .getString(key: SharedPrefKey.prefs_acs_token);
+    acsToken = Constants.ACS_TOKEN;
     serviceId = Constants.service_email_id;
 
     resp = await getAwailableSlotsAPI(date);
@@ -87,8 +86,7 @@ class ACSBookingController extends BaseController {
   }
 
   Future getAwailableSlotsAPI(String date) async {
-    acsToken = await AppSharedPreference()
-        .getString(key: SharedPrefKey.prefs_acs_token);
+    acsToken = Constants.ACS_TOKEN;
 
     var startScheduleTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date + "T08:00:00", true);
     var endScheduleTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date + "T17:00:00", true);
