@@ -181,6 +181,7 @@ class ACSChatCallingPhonePageState
   void getToken() async{
     var resp = await getTokenAPI();
     AppSharedPreference().addString(key:SharedPrefKey.prefs_acs_token, value: resp['access_token']);
+    Constants.ACS_TOKEN = resp['access_token'];
   }
 
   void setServiceId() async{
