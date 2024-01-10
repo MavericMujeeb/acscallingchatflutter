@@ -1,15 +1,15 @@
+import 'package:acscallingchatflutter/app/common/navigation/navigation.dart';
 import 'package:acscallingchatflutter/app/common/utils/custom_snackbar.dart';
+import 'package:acscallingchatflutter/app/widgets/custom_text.dart';
+import 'package:acscallingchatflutter/data/repositories/acs_chat_calling_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
 import 'package:intl/intl.dart';
-import 'package:acscallingchatflutter/app/common/navigation/navigation.dart';
-import 'package:acscallingchatflutter/app/widgets/custom_text.dart';
-import 'package:acscallingchatflutter/data/repositories/acs_chat_calling_repositories.dart';
+
 import '../../../../../utils/constants.dart';
 import '../../../../../utils/utility.dart';
 import '../../controller/acs_booking_controller.dart';
-import 'package:http/http.dart' as http;
 
 class ACSBookingPhonePage extends View {
   const ACSBookingPhonePage({Key? key}) : super(key: key);
@@ -18,8 +18,7 @@ class ACSBookingPhonePage extends View {
   ACSBookingPhonePageState createState() => ACSBookingPhonePageState();
 }
 
-class ACSBookingPhonePageState
-    // extends ViewState<ACSBookingPhonePage, ACSBookingController> {
+class ACSBookingPhonePageState // extends ViewState<ACSBookingPhonePage, ACSBookingController> {
     extends State<ACSBookingPhonePage> {
   // ACSBookingPhonePageState(): super(ACSBookingController(ACSChatCallingDataRepository()));
   // ACSBookingPhonePageState();
@@ -43,6 +42,7 @@ class ACSBookingPhonePageState
   static const spacing_18 = 18.0;
 
   final List<bool> _selected = List.generate(100, (i) => false);
+
   // late final List<bool> _selected;
   late final List<bool> _selectedBanker;
 
@@ -97,37 +97,60 @@ class ACSBookingPhonePageState
     // _selected = List.generate(timeslots.length, (i) => false);
     //_selected[0] = true;
     availableTimeSlots = getScheduleResponse != null &&
-        getScheduleResponse['value'] != null &&
+            getScheduleResponse['value'] != null &&
             getScheduleResponse['value'].length > 0 &&
             getScheduleResponse['value'][0]['availabilityView'] != null
         ? getScheduleResponse['value'][0]['availabilityView'].split('')
         : "000000000000000000".split('');
     var startWorkingHr = acsBookingController!.respGetBanker != null &&
-        acsBookingController!.respGetBanker['value'] != null &&
-        acsBookingController!.respGetBanker['value'].length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'] != null &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'].length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] != null &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] .length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['startTime'] != null
-        ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['startTime']
+            acsBookingController!.respGetBanker['value'] != null &&
+            acsBookingController!.respGetBanker['value'].length > 0 &&
+            acsBookingController!.respGetBanker['value'][0]['workingHours'] !=
+                null &&
+            acsBookingController!
+                    .respGetBanker['value'][0]['workingHours'].length >
+                0 &&
+            acsBookingController!.respGetBanker['value'][0]['workingHours'][0]
+                    ['timeSlots'] !=
+                null &&
+            acsBookingController!
+                    .respGetBanker['value'][0]['workingHours'][0]['timeSlots']
+                    .length >
+                0 &&
+            acsBookingController!.respGetBanker['value'][0]['workingHours'][0]
+                    ['timeSlots'][0]['startTime'] !=
+                null
+        ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]
+            ['timeSlots'][0]['startTime']
         : "14:00:00.0000000";
     var endWorkingHr = acsBookingController!.respGetBanker != null &&
-        acsBookingController!.respGetBanker['value'] != null &&
-        acsBookingController!.respGetBanker['value'].length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'] != null &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'].length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] != null &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'] .length > 0 &&
-        acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['endTime'] != null
-        ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]['timeSlots'][0]['endTime']
+            acsBookingController!.respGetBanker['value'] != null &&
+            acsBookingController!.respGetBanker['value'].length > 0 &&
+            acsBookingController!.respGetBanker['value'][0]['workingHours'] !=
+                null &&
+            acsBookingController!
+                    .respGetBanker['value'][0]['workingHours'].length >
+                0 &&
+            acsBookingController!.respGetBanker['value'][0]['workingHours'][0]
+                    ['timeSlots'] !=
+                null &&
+            acsBookingController!
+                    .respGetBanker['value'][0]['workingHours'][0]['timeSlots']
+                    .length >
+                0 &&
+            acsBookingController!.respGetBanker['value'][0]['workingHours'][0]
+                    ['timeSlots'][0]['endTime'] !=
+                null
+        ? acsBookingController!.respGetBanker['value'][0]['workingHours'][0]
+            ['timeSlots'][0]['endTime']
         : "23:00:00.0000000";
 
     var startTimeFormat = DateFormat("HH:mm:ss").parse(startWorkingHr, true);
     var endTimeFormat = DateFormat("HH:mm:ss").parse(endWorkingHr, true);
 
-    timeslots = acsBookingController!
-        .getTimeSlotsToDisplay(DateFormat.Hm().format(startTimeFormat.toLocal()), DateFormat.Hm().format(endTimeFormat.toLocal()));
+    timeslots = acsBookingController!.getTimeSlotsToDisplay(
+        DateFormat.Hm().format(startTimeFormat.toLocal()),
+        DateFormat.Hm().format(endTimeFormat.toLocal()));
 
     // var parts = timeslots[0].split('-');
     // acsBookingController!.pickedStartTime = parts[0].trim();
@@ -143,7 +166,8 @@ class ACSBookingPhonePageState
 
     if (acsBookingController!.respBooking.toString().contains("Error")) {
       // showToast("Something went wrong, please try again");
-      CustomSnackBar().showToast(context, acsBookingController!.respBooking.toString(), false);
+      CustomSnackBar().showToast(
+          context, acsBookingController!.respBooking.toString(), false);
     } else {
       // Navigate to previous screen..
       Constants.isSnackbarVisible = true;
@@ -154,9 +178,7 @@ class ACSBookingPhonePageState
           " with " +
           acsBookingController!.selectedBankerName;
       Constants.snackbarType = true;
-      setState(() {
-
-      });
+      setState(() {});
       /*CustomSnackBar().showToast(context, "Booking is completed on " +
           acsBookingController!.defaultDate +
           " at\n " +
@@ -242,8 +264,8 @@ class ACSBookingPhonePageState
           if (acsBookingController!.pickedStartTime == "" ||
               acsBookingController!.pickedEndTime == "") {
             // showToast(Constants.selectTimeSlotMsg);
-            CustomSnackBar().showToast(context, Constants.selectTimeSlotMsg, false);
-
+            CustomSnackBar()
+                .showToast(context, Constants.selectTimeSlotMsg, false);
           } else {
             bookAnAppointment();
             setState(() {});
@@ -298,7 +320,7 @@ class ACSBookingPhonePageState
       );
 
   Widget containerBankerList() => acsBookingController!.respGetBanker != null &&
-      acsBookingController!.respGetBanker['value'] != null &&
+          acsBookingController!.respGetBanker['value'] != null &&
           acsBookingController!.respGetBanker['value'].length > 0
       ? listBankers()
       : SizedBox(
@@ -356,8 +378,10 @@ class ACSBookingPhonePageState
                     ClipRRect(
                       borderRadius: BorderRadius.circular(40.0),
                       child: Image.asset(
-                        Utility.getUserProfileImage(acsBookingController!.respGetBanker['value']
-                        [index]['displayName'], index),
+                        Utility.getUserProfileImage(
+                            acsBookingController!.respGetBanker['value'][index]
+                                ['displayName'],
+                            index),
                         height: 40.0,
                         width: 40.0,
                         fit: BoxFit.fill,
@@ -419,8 +443,11 @@ class ACSBookingPhonePageState
                       ),
                     )
                   : acsBookingController!.resp != null &&
-                  acsBookingController!
-                      .resp['value'] != null &&
+                          acsBookingController!.resp['value'] != null &&
+                          acsBookingController!.resp['value'].length > 0 &&
+                          acsBookingController!.resp['value'][0]
+                                  ['availabilityView'] !=
+                              null &&
                           acsBookingController!
                                   .resp['value'][0]['availabilityView'].length >
                               0
@@ -571,7 +598,6 @@ class ACSBookingPhonePageState
       );
 
   displayTimeSlotNew(String time) {
-
     var strInputTime = time.split('-');
     var strStartTime = strInputTime[0].trim();
     var strEndTime = strInputTime[1].trim();
@@ -584,7 +610,9 @@ class ACSBookingPhonePageState
     var strConvertedStartTime = formatter_display_time.format(tempStartTime);
     var strConvertedEndTime = formatter_display_time.format(tempEndTime);
 
-    return strConvertedStartTime.toString()+ " - "+strConvertedEndTime.toString();
+    return strConvertedStartTime.toString() +
+        " - " +
+        strConvertedEndTime.toString();
   }
 
   void refreshTimeSlotsUI(int index) {
