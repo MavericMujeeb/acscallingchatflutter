@@ -11,8 +11,9 @@ class CustomSnackBar {
     }
     snackBar = Flushbar<bool>(
       message: strMsg,
+      duration: const Duration(seconds: 4),
       backgroundColor: status ? AppColor.green_toast : AppColor.red_toast,
-      margin: EdgeInsets.fromLTRB(16, 70, 16, 0),
+      margin: const EdgeInsets.fromLTRB(16, 70, 16, 0),
       borderRadius: BorderRadius.circular(10),
       flushbarPosition: FlushbarPosition.TOP,
       flushbarStyle: FlushbarStyle.FLOATING,

@@ -401,7 +401,7 @@ class ACSBookingPhonePageState // extends ViewState<ACSBookingPhonePage, ACSBook
                             fontWeight: FontWeight.w300),
                         vSpacer(spacing_4),
                         CustomText(
-                            textName: 'Available',
+                            textName: 'Private Banker',
                             textAlign: TextAlign.start,
                             fontSize: 11,
                             fontWeight: FontWeight.w200),
@@ -436,9 +436,9 @@ class ACSBookingPhonePageState // extends ViewState<ACSBookingPhonePage, ACSBook
               contentTitle(Constants.pickTimeSlot),
               vSpacer(10),
               acsBookingController!.inProgress
-                  ? SizedBox(
+                  ? const SizedBox(
                       height: 100,
-                      child: const Center(
+                      child: Center(
                         child: CircularProgressIndicator(),
                       ),
                     )
@@ -604,15 +604,13 @@ class ACSBookingPhonePageState // extends ViewState<ACSBookingPhonePage, ACSBook
 
     DateFormat formatter_display_time = DateFormat('hh:mm a');
 
-    DateTime tempStartTime = new DateFormat("HH:mm").parse(strStartTime, true);
-    DateTime tempEndTime = new DateFormat("HH:mm").parse(strEndTime, true);
+    DateTime tempStartTime = DateFormat("HH:mm").parse(strStartTime, true);
+    DateTime tempEndTime = DateFormat("HH:mm").parse(strEndTime, true);
 
     var strConvertedStartTime = formatter_display_time.format(tempStartTime);
     var strConvertedEndTime = formatter_display_time.format(tempEndTime);
 
-    return strConvertedStartTime.toString() +
-        " - " +
-        strConvertedEndTime.toString();
+    return "$strConvertedStartTime - $strConvertedEndTime";
   }
 
   void refreshTimeSlotsUI(int index) {
