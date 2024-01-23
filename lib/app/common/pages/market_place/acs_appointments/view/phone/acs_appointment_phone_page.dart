@@ -4,21 +4,16 @@ import 'dart:convert';
 import 'package:acscallingchatflutter/app/common/navigation/pages.dart';
 import 'package:acscallingchatflutter/app/common/utils/custom_snackbar.dart';
 import 'package:acscallingchatflutter/app/common/utils/utility.dart';
+import 'package:acscallingchatflutter/app/widgets/custom_text.dart';
+import 'package:acscallingchatflutter/data/repositories/acs_chat_calling_repositories.dart';
 import 'package:acscallingchatflutter/domain/entities/user_info_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clean_architecture/flutter_clean_architecture.dart';
-import 'package:get/utils.dart';
 import 'package:intl/intl.dart';
-import 'package:acscallingchatflutter/app/common/navigation/navigation.dart';
-import 'package:acscallingchatflutter/app/widgets/custom_text.dart';
-import 'package:acscallingchatflutter/data/helpers/shared_preferences.dart';
-import 'package:acscallingchatflutter/data/repositories/acs_chat_calling_repositories.dart';
 
 import '../../../../../utils/constants.dart';
 import '../../controller/acs_appointment_controller.dart';
-
-import 'package:http/http.dart' as http;
 
 class ACSAppointmentPhonePage extends View {
   const ACSAppointmentPhonePage({Key? key}) : super(key: key);
@@ -357,25 +352,40 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
-                  child: Image.asset(
-                    acsAppointmentController!.respGetBanker['value']
-                    [index]['displayName'] == Constants.bankerUserName ? Resources.available : Resources.busy,
-                    height: 10.0,
-                    width: 10.0,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(40.0),
-                  child: Image.asset(
-                    Utility.getUserProfileImage(acsAppointmentController!.respGetBanker['value']
-                    [index]['displayName'], index),
-                    height: 50.0,
-                    width: 50.0,
-                    fit: BoxFit.fill,
-                  ),
+                Stack(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.center,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(40.0),
+                        child: Image.asset(
+                          Utility.getUserProfileImage(
+                              acsAppointmentController!.respGetBanker['value']
+                                  [index]['displayName'],
+                              index),
+                          height: 50.0,
+                          width: 50.0,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(35, 0, 0, 0),
+                        child: Image.asset(
+                          acsAppointmentController!.respGetBanker['value']
+                                      [index]['displayName'] ==
+                                  Constants.bankerUserName
+                              ? Resources.available
+                              : Resources.busy,
+                          height: 10.0,
+                          width: 10.0,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 vSpacer(spacing_8),
                 CustomText(
@@ -398,10 +408,11 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                   children: [
                     GestureDetector(
                       onTap: () => {
-                        acsAppointmentController!.respGetBanker['value']
-                        [index]['displayName'] == Constants.bankerUserName
+                        acsAppointmentController!.respGetBanker['value'][index]
+                                    ['displayName'] ==
+                                Constants.bankerUserName
                             ? audioCallWithBanker(acsAppointmentController!
-                            .respGetBanker['value'][index]['emailAddress'])
+                                .respGetBanker['value'][index]['emailAddress'])
                             : null
                       },
                       child: Image.asset(
@@ -414,10 +425,11 @@ class ACSAppointmentPhonePageState // extends ViewState<ACSAppointmentPhonePage,
                     hSpacer(spacing_26),
                     GestureDetector(
                       onTap: () => {
-                        acsAppointmentController!.respGetBanker['value']
-                        [index]['displayName'] == Constants.bankerUserName
+                        acsAppointmentController!.respGetBanker['value'][index]
+                                    ['displayName'] ==
+                                Constants.bankerUserName
                             ? videoCallWithBanker(acsAppointmentController!
-                            .respGetBanker['value'][index]['emailAddress'])
+                                .respGetBanker['value'][index]['emailAddress'])
                             : null
                       },
                       child: Image.asset(
