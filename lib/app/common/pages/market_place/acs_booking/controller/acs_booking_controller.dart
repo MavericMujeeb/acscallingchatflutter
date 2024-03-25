@@ -1,11 +1,12 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
+
 import 'package:acscallingchatflutter/app/common/pages/base/controller/base_controller.dart';
+import 'package:acscallingchatflutter/app/common/pages/market_place/acs_booking/model/GetScheduleRequest.dart';
 import 'package:acscallingchatflutter/app/common/utils/constants.dart';
 import 'package:acscallingchatflutter/data/helpers/shared_preferences.dart';
 import 'package:acscallingchatflutter/domain/entities/product_dao.dart';
-
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class ACSBookingController extends BaseController {
   List<ProductDao> similarApps = [];
@@ -88,30 +89,70 @@ class ACSBookingController extends BaseController {
   Future getAwailableSlotsAPI(String date) async {
     acsToken = Constants.ACS_TOKEN;
 
-    var startScheduleTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date + "T08:00:00", true);
-    var endScheduleTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date + "T17:00:00", true);
-    var utcStartTime = DateTime(startScheduleTimeFormat.year, startScheduleTimeFormat.month, startScheduleTimeFormat.day, startScheduleTimeFormat.hour, startScheduleTimeFormat.minute, startScheduleTimeFormat.second);
-    var utcEndTime = DateTime(endScheduleTimeFormat.year, endScheduleTimeFormat.month, endScheduleTimeFormat.day, endScheduleTimeFormat.hour, endScheduleTimeFormat.minute, endScheduleTimeFormat.second);
+    var startScheduleTimeFormat =
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date + "T08:00:00", true);
+    var endScheduleTimeFormat =
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date + "T17:00:00", true);
+    var utcStartTime = DateTime(
+        startScheduleTimeFormat.year,
+        startScheduleTimeFormat.month,
+        startScheduleTimeFormat.day,
+        startScheduleTimeFormat.hour,
+        startScheduleTimeFormat.minute,
+        startScheduleTimeFormat.second);
+    var utcEndTime = DateTime(
+        endScheduleTimeFormat.year,
+        endScheduleTimeFormat.month,
+        endScheduleTimeFormat.day,
+        endScheduleTimeFormat.hour,
+        endScheduleTimeFormat.minute,
+        endScheduleTimeFormat.second);
 
     // print("startScheduleTime-> "+startScheduleTimeFormat.toUtc().toString());
     // print("startScheduleTime-> "+endScheduleTimeFormat.toUtc().toString());
     // print("startScheduleTime-> "+utcStartTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', ""));
     // print("startScheduleTime-> "+utcEndTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', ""));
     // print("startScheduleTime-> "+utcStartTime.timeZoneName);
-    final body = {
-      "schedules": ["$selectedBankerEmailId"],
-      "startTime": {
-        "dateTime": utcStartTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', ""),
-        "timeZone": "UTC"
-      },
-      "endTime": {
-        "dateTime": utcEndTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', ""),
-        "timeZone": "UTC"
-      },
-      "availabilityViewInterval": 30
-    };
 
-    final requestString = json.encode(body);
+    // final body = {
+    //   "schedules": ["$selectedBankerEmailId"],
+    //   "startTime": {
+    //     "dateTime": utcStartTime
+    //         .toUtc()
+    //         .toString()
+    //         .replaceAll(' ', "T")
+    //         .replaceAll('.000Z', ""),
+    //     "timeZone": "UTC"
+    //   },
+    //   "endTime": {
+    //     "dateTime": utcEndTime
+    //         .toUtc()
+    //         .toString()
+    //         .replaceAll(' ', "T")
+    //         .replaceAll('.000Z', ""),
+    //     "timeZone": "UTC"
+    //   },
+    //   "availabilityViewInterval": 30
+    // };
+    final requestbody = GetScheduleRequest().copyWith(
+        ["$selectedBankerEmailId"],
+        StartTime().copyWith(
+            utcStartTime
+                .toUtc()
+                .toString()
+                .replaceAll(' ', "T")
+                .replaceAll('.000Z', ""),
+            "UTC"),
+        EndTime().copyWith(
+            utcEndTime
+                .toUtc()
+                .toString()
+                .replaceAll(' ', "T")
+                .replaceAll('.000Z', ""),
+            "UTC"),
+        30).toJson();
+
+    final requestString = json.encode(requestbody);
 
     var emailId = Constants.get_schedule_user_service_email_id;
     var url = Uri.parse(
@@ -173,8 +214,8 @@ class ACSBookingController extends BaseController {
       body: {
         'client_id': Constants.client_id,
         'scope': 'https://graph.microsoft.com/.default',
-        'client_secret':Constants.client_secret,
-        'grant_type':'client_credentials'
+        'client_secret': Constants.client_secret,
+        'grant_type': 'client_credentials'
       },
     );
 
@@ -182,7 +223,7 @@ class ACSBookingController extends BaseController {
     return convertDataToJson;
   }
 
-  Future actionBookAppointment(String acsTokenNew) async{
+  Future actionBookAppointment(String acsTokenNew) async {
     inProgressFullScreen = true;
 
     respBooking = await bookAppointAPI(acsTokenNew);
@@ -200,11 +241,24 @@ class ACSBookingController extends BaseController {
   }
 
   Future bookAppointAPI(String acsTokenNew) async {
-
-    var startTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(defaultDate+"T"+pickedStartTime+":00", true);
-    var endTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(defaultDate+"T"+pickedEndTime+":00", true);
-    var utcStartTime = DateTime(startTimeFormat.year, startTimeFormat.month, startTimeFormat.day, startTimeFormat.hour, startTimeFormat.minute, startTimeFormat.second);
-    var utcEndTime = DateTime(endTimeFormat.year, endTimeFormat.month, endTimeFormat.day, endTimeFormat.hour, endTimeFormat.minute, endTimeFormat.second);
+    var startTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        .parse(defaultDate + "T" + pickedStartTime + ":00", true);
+    var endTimeFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        .parse(defaultDate + "T" + pickedEndTime + ":00", true);
+    var utcStartTime = DateTime(
+        startTimeFormat.year,
+        startTimeFormat.month,
+        startTimeFormat.day,
+        startTimeFormat.hour,
+        startTimeFormat.minute,
+        startTimeFormat.second);
+    var utcEndTime = DateTime(
+        endTimeFormat.year,
+        endTimeFormat.month,
+        endTimeFormat.day,
+        endTimeFormat.hour,
+        endTimeFormat.minute,
+        endTimeFormat.second);
 
     final body = {
       "@odata.type": "#microsoft.graph.bookingAppointment",
@@ -212,18 +266,28 @@ class ACSBookingController extends BaseController {
       "smsNotificationsEnabled": false,
       "startDateTime": {
         "@odata.type": "#microsoft.graph.dateTimeTimeZone",
-        "dateTime": utcStartTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', "")+".0000000+00:00",
+        "dateTime": utcStartTime
+                .toUtc()
+                .toString()
+                .replaceAll(' ', "T")
+                .replaceAll('.000Z', "") +
+            ".0000000+00:00",
         "timeZone": "UTC"
       },
       "endDateTime": {
         "@odata.type": "#microsoft.graph.dateTimeTimeZone",
-        "dateTime": utcEndTime.toUtc().toString().replaceAll(' ', "T").replaceAll('.000Z', "")+".0000000+00:00",
+        "dateTime": utcEndTime
+                .toUtc()
+                .toString()
+                .replaceAll(' ', "T")
+                .replaceAll('.000Z', "") +
+            ".0000000+00:00",
         "timeZone": "UTC"
       },
       "isLocationOnline": true,
       "optOutOfCustomerEmail": false,
       "anonymousJoinWebUrl": null,
-      "staffMemberIds":["$selectedBankerId"],
+      "staffMemberIds": ["$selectedBankerId"],
       "postBuffer": "PT0S",
       "preBuffer": "PT0S",
       "price": 0,
@@ -281,7 +345,8 @@ class ACSBookingController extends BaseController {
       "serviceNotes": "Customer requires punctual service.",
       "maximumAttendeesCount": 1,
       "filledAttendeesCount": 1,
-      "customers@odata.type": "#Collection(microsoft.graph.bookingCustomerInformation)",
+      "customers@odata.type":
+          "#Collection(microsoft.graph.bookingCustomerInformation)",
       "customers": [
         {
           "@odata.type": "#microsoft.graph.bookingCustomerInformation",
@@ -314,7 +379,7 @@ class ACSBookingController extends BaseController {
               "altitudeAccuracy": null
             }
           },
-          "timeZone":"America/Chicago",
+          "timeZone": "America/Chicago",
           "customQuestionAnswers": [
             {
               "questionId": "3bc6fde0-4ad3-445d-ab17-0fc15dba0774",
@@ -332,22 +397,29 @@ class ACSBookingController extends BaseController {
 
     final requestString = json.encode(body);
 
-    var serviceID = await AppSharedPreference().getString(key: SharedPrefKey.prefs_service_id);
+    var serviceID = await AppSharedPreference()
+        .getString(key: SharedPrefKey.prefs_service_id);
 
     // var url = Uri.parse('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceId/staffMembers/');
-    var url = Uri.parse('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceID/appointments');
+    var url = Uri.parse(
+        'https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/$serviceID/appointments');
 
-    final response =
-    await http.post(url, headers: {"Authorization": "Bearer " + acsTokenNew, "Content-Type": "application/json"}, body: requestString);
+    final response = await http.post(url,
+        headers: {
+          "Authorization": "Bearer " + acsTokenNew,
+          "Content-Type": "application/json"
+        },
+        body: requestString);
 
-    if(response.statusCode.toString() == "201") {
+    if (response.statusCode.toString() == "201") {
       var convertDataToJson = jsonDecode(response.body);
       return convertDataToJson;
     } else {
       var convertDataToJson = jsonDecode(response.body);
-      var convertErrorMessageData = jsonDecode(convertDataToJson['error']['message']);
+      var convertErrorMessageData =
+          jsonDecode(convertDataToJson['error']['message']);
       // return "Error there : "+response.statusCode.toString();
-      return "Error: "+convertErrorMessageData['error']['message'];
+      return "Error: " + convertErrorMessageData['error']['message'];
       //return "${"Error "+convertDataToJson['error']['code']}, "+convertErrorMessageData['error']['message'];
     }
 
